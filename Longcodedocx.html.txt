@@ -127,11 +127,12 @@
     .reading-widget-container { position: relative; flex: 1 1 auto; width: 100%; max-width: 100%; min-width: 0; min-height: 0; box-sizing: border-box; overflow: visible; }
     .reading-widget { position: relative; width: 100%; max-width: 100%; min-width: 0; height: auto; margin: 0; box-sizing: border-box; }
     .reading-widget[hidden] { display: none !important; }
+    /* Premium.Chat injects a fixed-size, cross-origin iframe.  Keep its native
+       size here so the script can measure it, then scale the whole document
+       (rather than squeezing only the iframe viewport). */
     .pchat-widget-placeholder { position: relative; display: block; width: 92%; max-width: 100%; min-width: 0; min-height: 1px; margin: 0 auto; box-sizing: border-box; isolation: isolate; }
-    /* Preserve Premium.Chat's normal embed markup while preventing its outer
-       document from exceeding the available portal viewport. */
-    .pchat-widget-placeholder > * { max-width: 100% !important; box-sizing: border-box; }
-    .pchat-widget-placeholder iframe { display: block; max-width: 100% !important; border: 0; }
+    .pchat-widget-placeholder > * { max-width: none !important; box-sizing: border-box; }
+    .pchat-widget-placeholder iframe { display: block; max-width: none !important; border: 0; }
     .portal-gate { position: absolute; z-index: 4; inset: 0; overflow: hidden; background: #08020c; cursor: pointer; }
     .portal-gate[hidden] { display: none; }
     .portal-gate picture { position: absolute; inset: 0; display: block; width: 100%; height: 100%; margin: 0; padding: 0; }
@@ -1174,12 +1175,60 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
           revealPortal(gate);
         }
       });
+      function widgetRoot(panel) {
+        var placeholder = panel && panel.querySelector('.pchat-widget-placeholder');
+        return placeholder && placeholder.firstElementChild;
+      }
+      function dimension(element, name) {
+        if (!element) return 0;
+        var attribute = parseFloat(element.getAttribute(name)) || 0;
+        var inline = parseFloat(element.style[name]) || 0;
+        var rect = element.getBoundingClientRect();
+        var scroll = name === 'width' ? element.scrollWidth : element.scrollHeight;
+        var offset = name === 'width' ? element.offsetWidth : element.offsetHeight;
+        return Math.max(attribute, inline, rect[name], scroll, offset);
+      }
+      function fitReadingWidget(panel) {
+        if (!panel || panel.hidden) return;
+        var placeholder = panel.querySelector('.pchat-widget-placeholder');
+        var root = widgetRoot(panel);
+        if (!placeholder || !root) return;
+        var frame = root.matches('iframe') ? root : root.querySelector('iframe');
+
+        // The iframe is owned by premium.chat, so its document cannot be styled
+        // from this page. Measure its native box and scale that entire box.
+        root.style.removeProperty('transform');
+        root.style.removeProperty('transform-origin');
+        root.style.removeProperty('margin-left');
+        placeholder.style.removeProperty('height');
+        var nativeWidth = Math.max(dimension(root, 'width'), dimension(frame, 'width'));
+        var nativeHeight = Math.max(dimension(root, 'height'), dimension(frame, 'height'));
+        var availableWidth = placeholder.getBoundingClientRect().width;
+        var availableHeight = panel.closest('.reading-widget-container').getBoundingClientRect().height;
+        if (!nativeWidth || !nativeHeight || !availableWidth || !availableHeight) return;
+        var scale = Math.min(1, availableWidth / nativeWidth, availableHeight / nativeHeight);
+        var scaledWidth = Math.ceil(nativeWidth * scale);
+        var scaledHeight = Math.ceil(nativeHeight * scale);
+        root.style.setProperty('width', nativeWidth + 'px', 'important');
+        root.style.setProperty('height', nativeHeight + 'px', 'important');
+        root.style.setProperty('transform-origin', 'top left', 'important');
+        root.style.setProperty('transform', 'scale(' + scale + ')', 'important');
+        root.style.setProperty('margin-left', Math.max(0, (availableWidth - scaledWidth) / 2) + 'px', 'important');
+        placeholder.style.height = scaledHeight + 'px';
+        panel.dataset.widgetScale = scale.toFixed(4);
+        panel.dataset.widgetWidth = String(Math.round(nativeWidth));
+        panel.dataset.widgetHeight = String(Math.round(nativeHeight));
+      }
       function selectReadingMode(portal, mode) {
         if (!portal || !/^(video|audio|chat)$/.test(mode)) return;
         var tabs = portal.querySelectorAll('[data-mode]');
         var panels = portal.querySelectorAll('[data-widget]');
         for (var t = 0; t < tabs.length; t++) tabs[t].setAttribute('aria-selected', tabs[t].getAttribute('data-mode') === mode ? 'true' : 'false');
-        for (var p = 0; p < panels.length; p++) panels[p].hidden = panels[p].getAttribute('data-widget') !== mode;
+        for (var p = 0; p < panels.length; p++) {
+          var active = panels[p].getAttribute('data-widget') === mode;
+          panels[p].hidden = !active;
+          if (active) requestAnimationFrame((function (item) { return function () { fitReadingWidget(item); }; }(panels[p])));
+        }
       }
 
       var readingPortal = document.querySelector('[data-reading-portal]');
@@ -1193,6 +1242,8 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
       function placeReadingPortal() {
         var slot = activePortalSlot();
         if (readingPortal && slot && readingPortal.parentNode !== slot) slot.appendChild(readingPortal);
+        var active = readingPortal && readingPortal.querySelector('[data-widget]:not([hidden])');
+        if (active) requestAnimationFrame(function () { fitReadingWidget(active); });
       }
       if (readingPortal) {
         readingPortal.addEventListener('click', function (event) {
@@ -1200,7 +1251,23 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
           if (tab) selectReadingMode(readingPortal, tab.getAttribute('data-mode'));
         });
       }
+      if ('MutationObserver' in window && readingPortal) {
+        new MutationObserver(function () {
+          var active = readingPortal.querySelector('[data-widget]:not([hidden])');
+          if (active) requestAnimationFrame(function () { fitReadingWidget(active); });
+        }).observe(readingPortal.querySelector('.reading-widget-container'), { childList: true, subtree: true });
+      }
+      if ('ResizeObserver' in window && readingPortal) {
+        new ResizeObserver(function () {
+          var active = readingPortal.querySelector('[data-widget]:not([hidden])');
+          if (active) fitReadingWidget(active);
+        }).observe(readingPortal.querySelector('.reading-widget-container'));
+      }
       placeReadingPortal();
+      requestAnimationFrame(function () {
+        var active = readingPortal && readingPortal.querySelector('[data-widget]:not([hidden])');
+        if (active) fitReadingWidget(active);
+      });
       var layoutQuery = window.matchMedia('(max-width: 767px), (orientation: portrait)');
       if (layoutQuery.addEventListener) layoutQuery.addEventListener('change', placeReadingPortal);
       else layoutQuery.addListener(placeReadingPortal);
