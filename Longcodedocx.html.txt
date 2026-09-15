@@ -108,22 +108,24 @@
     .schedule-copy { white-space: pre-line; }
     .portal-view { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; overflow: hidden; isolation: isolate; }
     .portal-header { position: relative; height: 21%; max-height: none; margin-bottom: 1%; }
-    /* Each service owns an independent measured wrapper. Only the active widget
-       participates in layout; the provider library is loaded once for all six
-       desktop/mobile instances. */
-    .live-reading-portal { position: absolute; z-index: 2; inset: 21% 0 0; display: flex; min-width: 0; min-height: 0; flex-direction: column; box-sizing: border-box; }
+    /* A single Premium.Chat portal is moved into the active artwork layout.
+       The provider owns its widget dimensions; this page only supplies the
+       responsive viewport around it. */
+    .reading-portal-slot { position: absolute; z-index: 2; inset: 21% 0 0; min-width: 0; min-height: 0; }
+    .live-reading-portal { position: absolute; inset: 0; display: flex; min-width: 0; min-height: 0; flex-direction: column; box-sizing: border-box; }
     .reading-mode-links { display: flex; flex: 0 0 auto; align-items: center; justify-content: center; flex-wrap: nowrap; gap: clamp(5px, 1.2vw, 10px); padding: .2em 4%; }
     .reading-mode-links button { appearance: none; display: grid; place-items: center; flex: 0 0 auto; width: clamp(26px, 4.2vw, 38px); height: clamp(26px, 4.2vw, 38px); margin: 0; padding: 2px; border: 1px solid transparent; border-radius: 50%; background: transparent; cursor: pointer; }
     .reading-mode-links img { display: block; width: 100%; height: 100%; object-fit: contain; }
     .reading-mode-links button[aria-selected="true"] { border-color: rgb(103 31 99 / 72%); box-shadow: 0 0 5px rgb(103 31 99 / 45%); }
     .reading-mode-links button:focus-visible { outline: 1px solid #671f63; outline-offset: 2px; }
-    .reading-widget-container { position: relative; flex: 1 1 auto; width: 100%; max-width: 100%; min-width: 0; min-height: 0; box-sizing: border-box; overflow-x: clip; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
+    .reading-widget-container { position: relative; flex: 1 1 auto; width: 100%; max-width: 100%; min-width: 0; min-height: 0; box-sizing: border-box; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
     .reading-widget { position: relative; width: 100%; max-width: 100%; min-width: 0; height: auto; margin: 0; box-sizing: border-box; }
-    .reading-widget[hidden] { display: none !important; height: 0 !important; }
-    .pchat-widget-placeholder { position: relative; display: block; width: 92%; max-width: 92%; min-width: 0; height: auto; min-height: 1px; margin: 0 auto; box-sizing: border-box; isolation: isolate; }
-    .pchat-widget-placeholder > * { box-sizing: border-box !important; display: block !important; margin: 0 !important; border: 0 !important; transform-origin: top center !important; }
-    .pchat-widget-placeholder iframe { display: block !important; max-width: none !important; margin: 0 !important; border: 0 !important; }
-    .pchat-contained-overlay { position: absolute !important; inset: 0 !important; z-index: 5 !important; max-width: 100% !important; overflow: auto !important; }
+    .reading-widget[hidden] { display: none !important; }
+    .pchat-widget-placeholder { position: relative; display: block; width: 92%; max-width: 100%; min-width: 0; min-height: 1px; margin: 0 auto; box-sizing: border-box; isolation: isolate; }
+    /* Preserve Premium.Chat's normal embed markup while preventing its outer
+       document from exceeding the available portal viewport. */
+    .pchat-widget-placeholder > * { max-width: 100% !important; box-sizing: border-box; }
+    .pchat-widget-placeholder iframe { display: block; max-width: 100% !important; border: 0; }
     .portal-gate { position: absolute; z-index: 4; inset: 0; overflow: hidden; background: #08020c; cursor: pointer; }
     .portal-gate[hidden] { display: none; }
     .portal-gate picture { position: absolute; inset: 0; display: block; width: 100%; height: 100%; margin: 0; padding: 0; }
@@ -645,7 +647,7 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
     <section class="content-section portal-view" data-section="portal" hidden>
       <h1 class="sr-only">Live Reading Portal</h1>
       <img class="panel-header portal-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949649/C2604EB8-27DF-4E1C-953B-87B9235FAC6F_nh2zt0.png" alt="Premium.chat">
-      <div class="live-reading-portal" data-reading-portal>
+      <div class="reading-portal-slot" data-reading-portal-slot><div class="live-reading-portal" data-reading-portal>
         <div class="reading-mode-links" role="tablist" aria-label="Choose a live-reading service">
           <button type="button" role="tab" data-mode="chat" aria-selected="true" aria-label="Chat Session" title="Chat Session"><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789206888/726BCCAF-BEC4-43D4-846C-36D92A0F22BF_isszh2.png" alt=""></button>
           <button type="button" role="tab" data-mode="audio" aria-selected="false" aria-label="Audio Call" title="Audio Call"><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789206888/0DD3801F-7509-4331-ADA9-1791436EDF08_ui4hyk.png" alt=""></button>
@@ -656,7 +658,7 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
           <div class="reading-widget" data-widget="audio" data-widget-id="1016623" role="tabpanel" hidden><div class="pchat-widget-placeholder"></div></div>
           <div class="reading-widget" data-widget="chat" data-widget-id="1014748" role="tabpanel"><div class="pchat-widget-placeholder"></div></div>
         </div>
-      </div>
+      </div></div>
       <div class="portal-gate" role="button" tabindex="0" aria-label="Enter the Live Reading Portal"><picture><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788991611/IMG_4391_vicok8.png" alt="Enter the Live Reading Portal"></picture></div>
     </section>
       </div></section>
@@ -1064,18 +1066,7 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
     <section class="content-section portal-view" data-section="portal" hidden>
       <h1 class="sr-only">Live Reading Portal</h1>
       <img class="panel-header portal-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949649/C2604EB8-27DF-4E1C-953B-87B9235FAC6F_nh2zt0.png" alt="Premium.chat">
-      <div class="live-reading-portal" data-reading-portal>
-        <div class="reading-mode-links" role="tablist" aria-label="Choose a live-reading service">
-          <button type="button" role="tab" data-mode="chat" aria-selected="true" aria-label="Chat Session" title="Chat Session"><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789206888/726BCCAF-BEC4-43D4-846C-36D92A0F22BF_isszh2.png" alt=""></button>
-          <button type="button" role="tab" data-mode="audio" aria-selected="false" aria-label="Audio Call" title="Audio Call"><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789206888/0DD3801F-7509-4331-ADA9-1791436EDF08_ui4hyk.png" alt=""></button>
-          <button type="button" role="tab" data-mode="video" aria-selected="false" aria-label="Video Chat" title="Video Chat"><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789206888/CC586E67-96A0-4D09-99C9-BCD5D7CA1C59_ubvtm8.png" alt=""></button>
-        </div>
-        <div class="reading-widget-container">
-          <div class="reading-widget" data-widget="video" data-widget-id="1016625" role="tabpanel" hidden><div class="pchat-widget-placeholder"></div></div>
-          <div class="reading-widget" data-widget="audio" data-widget-id="1016623" role="tabpanel" hidden><div class="pchat-widget-placeholder"></div></div>
-          <div class="reading-widget" data-widget="chat" data-widget-id="1014748" role="tabpanel"><div class="pchat-widget-placeholder"></div></div>
-        </div>
-      </div>
+      <div class="reading-portal-slot" data-reading-portal-slot></div>
       <div class="portal-gate" role="button" tabindex="0" aria-label="Enter the Live Reading Portal"><picture><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788991611/IMG_4392_zmwfyr.png" alt="Enter the Live Reading Portal"></picture></div>
     </section>
       </div></section>
@@ -1111,7 +1102,7 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
   <script type="text/javascript">
     (function (d, w) {
       w.premiumchat = w.premiumchat || [];
-      var ids = [1016625, 1016623, 1014748, 1016625, 1016623, 1014748];
+      var ids = [1016625, 1016623, 1014748];
       for (var i = 0; i < ids.length; i++) w.premiumchat.push({ num: w.premiumchat.length, wid: ids[i] });
       w.premiumchat_domain = 'https://premium.chat/';
       var script = d.createElement('script');
@@ -1177,86 +1168,36 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
           revealPortal(gate);
         }
       });
-      function widgetRoot(panel) {
-        var placeholder = panel && panel.querySelector('.pchat-widget-placeholder');
-        return placeholder && placeholder.firstElementChild;
-      }
-      function numericDimension(element, name) {
-        if (!element) return 0;
-        var attribute = parseFloat(element.getAttribute && element.getAttribute(name));
-        var inline = parseFloat(element.style && element.style[name]);
-        var scroll = name === 'width' ? element.scrollWidth : element.scrollHeight;
-        var offset = name === 'width' ? element.offsetWidth : element.offsetHeight;
-        var rect = element.getBoundingClientRect();
-        return Math.max(attribute || 0, inline || 0, scroll || 0, offset || 0, rect[name] || 0);
-      }
-      function fitReadingWidget(panel) {
-        if (!panel || panel.hidden) return;
-        var placeholder = panel.querySelector('.pchat-widget-placeholder');
-        var root = widgetRoot(panel);
-        if (!placeholder || !root) return;
-        root.style.removeProperty('transform');
-        root.style.removeProperty('width');
-        root.style.removeProperty('height');
-        placeholder.style.height = 'auto';
-        var frame = root.matches('iframe') ? root : root.querySelector('iframe');
-        var portal = panel.closest('[data-reading-portal]');
-        var portalRect = portal.getBoundingClientRect();
-        var targetWidth = placeholder.getBoundingClientRect().width;
-        var naturalWidth = Math.max(numericDimension(root, 'width'), numericDimension(frame, 'width'));
-        var naturalHeight = Math.max(numericDimension(root, 'height'), numericDimension(frame, 'height'));
-        if (!naturalWidth || !naturalHeight || !targetWidth) return;
-        var scale = Math.min(1, targetWidth / naturalWidth);
-        var scaledHeight = Math.ceil(naturalHeight * scale);
-        root.style.setProperty('width', naturalWidth + 'px', 'important');
-        root.style.setProperty('height', naturalHeight + 'px', 'important');
-        root.style.setProperty('transform-origin', 'top center', 'important');
-        root.style.setProperty('transform', 'scale(' + scale + ')', 'important');
-        root.style.setProperty('margin-left', ((targetWidth - naturalWidth) / 2) + 'px', 'important');
-        placeholder.style.height = scaledHeight + 'px';
-        panel.dataset.widgetScale = scale.toFixed(4);
-        panel.dataset.widgetWidth = String(Math.round(naturalWidth));
-        panel.dataset.widgetHeight = String(Math.round(naturalHeight));
-        panel.dataset.scaledHeight = String(scaledHeight);
-        panel.dataset.portalWidth = String(Math.round(portalRect.width));
-      }
       function selectReadingMode(portal, mode) {
         if (!portal || !/^(video|audio|chat)$/.test(mode)) return;
         var tabs = portal.querySelectorAll('[data-mode]');
         var panels = portal.querySelectorAll('[data-widget]');
         for (var t = 0; t < tabs.length; t++) tabs[t].setAttribute('aria-selected', tabs[t].getAttribute('data-mode') === mode ? 'true' : 'false');
-        for (var p = 0; p < panels.length; p++) {
-          var active = panels[p].getAttribute('data-widget') === mode;
-          panels[p].hidden = !active;
-          if (active) requestAnimationFrame((function (panel) { return function () { fitReadingWidget(panel); }; }(panels[p])));
+        for (var p = 0; p < panels.length; p++) panels[p].hidden = panels[p].getAttribute('data-widget') !== mode;
+      }
+
+      var readingPortal = document.querySelector('[data-reading-portal]');
+      var portalSlots = document.querySelectorAll('[data-reading-portal-slot]');
+      function activePortalSlot() {
+        for (var i = 0; i < portalSlots.length; i++) {
+          if (portalSlots[i].closest('.layout').offsetParent !== null) return portalSlots[i];
         }
+        return portalSlots[0];
       }
-      var readingPortals = document.querySelectorAll('[data-reading-portal]');
-      for (var rp = 0; rp < readingPortals.length; rp++) {
-        readingPortals[rp].addEventListener('click', function (event) {
+      function placeReadingPortal() {
+        var slot = activePortalSlot();
+        if (readingPortal && slot && readingPortal.parentNode !== slot) slot.appendChild(readingPortal);
+      }
+      if (readingPortal) {
+        readingPortal.addEventListener('click', function (event) {
           var tab = event.target.closest('[data-mode]');
-          if (tab) selectReadingMode(this, tab.getAttribute('data-mode'));
+          if (tab) selectReadingMode(readingPortal, tab.getAttribute('data-mode'));
         });
       }
-      if ('MutationObserver' in window) {
-        var widgetObserver = new MutationObserver(function (records) {
-          for (var r = 0; r < records.length; r++) {
-            var target = records[r].target.nodeType === 1 ? records[r].target : records[r].target.parentElement;
-            var panel = target && target.closest('[data-widget]');
-            if (panel && !panel.hidden) requestAnimationFrame((function (item) { return function () { fitReadingWidget(item); }; }(panel)));
-          }
-        });
-        for (var mo = 0; mo < readingPortals.length; mo++) widgetObserver.observe(readingPortals[mo].querySelector('.reading-widget-container'), { childList: true, subtree: true });
-      }
-      if ('ResizeObserver' in window) {
-        var portalSizer = new ResizeObserver(function (entries) {
-          for (var e = 0; e < entries.length; e++) {
-            var active = entries[e].target.querySelector('[data-widget]:not([hidden])');
-            if (active) fitReadingWidget(active);
-          }
-        });
-        for (var ro = 0; ro < readingPortals.length; ro++) portalSizer.observe(readingPortals[ro]);
-      }
+      placeReadingPortal();
+      var layoutQuery = window.matchMedia('(max-width: 767px), (orientation: portrait)');
+      if (layoutQuery.addEventListener) layoutQuery.addEventListener('change', placeReadingPortal);
+      else layoutQuery.addListener(placeReadingPortal);
       window.addEventListener('hashchange', function () { renderRoute(validRoute(window.location.hash.slice(1))); });
       var initialRoute = validRoute(window.location.hash.slice(1));
       renderRoute(initialRoute);
