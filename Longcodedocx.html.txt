@@ -127,9 +127,10 @@
     .reading-widget-container { position: relative; flex: 1 1 auto; width: 100%; max-width: 100%; min-width: 0; min-height: 0; box-sizing: border-box; overflow: visible; }
     .reading-widget { position: relative; width: 100%; max-width: 100%; min-width: 0; height: auto; margin: 0; box-sizing: border-box; }
     .reading-widget[hidden] { display: none !important; }
-    /* Premium.Chat injects a fixed-size, cross-origin iframe.  Keep its native
+    /* Premium.Chat injects a fixed-size, cross-origin iframe. Keep its native
        size here so the script can measure it, then scale the whole document
-       (rather than squeezing only the iframe viewport). */
+       (rather than squeezing only the iframe viewport). The placeholder has
+       no scrolling or clipping: its height is updated to the scaled height. */
     .pchat-widget-placeholder { position: relative; display: block; width: 92%; max-width: 100%; min-width: 0; min-height: 1px; margin: 0 auto; box-sizing: border-box; isolation: isolate; }
     .pchat-widget-placeholder > * { max-width: none !important; box-sizing: border-box; }
     .pchat-widget-placeholder iframe { display: block; max-width: none !important; border: 0; }
@@ -1142,6 +1143,9 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
           sections[i].hidden = !active;
         }
         for (var p = 0; p < hosts.length; p++) hosts[p].parentNode.scrollTop = 0;
+        if (name === 'portal' && typeof placeReadingPortal === 'function') {
+          placeReadingPortal();
+        }
         document.title = (name === 'home' ? 'Alchemical Visions' : name.replace(/(^|-)\w/g, function (m) { return m.toUpperCase(); }) + ' | Alchemical Visions');
       }
 
@@ -1164,6 +1168,8 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
       }
       function revealPortal(gate) {
         if (gate) gate.hidden = true;
+        var active = readingPortal && readingPortal.querySelector('[data-widget]:not([hidden])');
+        if (active) requestAnimationFrame(function () { fitReadingWidget(active); });
       }
       document.addEventListener('click', function (event) {
         revealPortal(event.target.closest('.portal-gate'));
@@ -1219,6 +1225,32 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
         panel.dataset.widgetWidth = String(Math.round(nativeWidth));
         panel.dataset.widgetHeight = String(Math.round(nativeHeight));
       }
+      function premiumChatFrameId(frame) {
+        if (!frame) return '';
+        var source = frame.getAttribute('src') || frame.src || '';
+        var portalIds = ['1016625', '1016623', '1014748'];
+        for (var i = 0; i < portalIds.length; i++) {
+          if (source.indexOf(portalIds[i]) !== -1) return portalIds[i];
+        }
+        return '';
+      }
+      function claimPremiumChatEmbeds() {
+        /* The provider loader appends its iframes asynchronously. Claim only
+           the three portal iframe ids; the separately supplied corner button
+           is deliberately never selected or moved. */
+        var frames = document.querySelectorAll('iframe');
+        for (var i = 0; i < frames.length; i++) {
+          var frame = frames[i];
+          if (frame.closest('.premium-chat-corner') || frame.closest('.pchat-widget-placeholder')) continue;
+          var id = premiumChatFrameId(frame);
+          if (!id) continue;
+          var panel = readingPortal && readingPortal.querySelector('[data-widget-id="' + id + '"]');
+          var placeholder = panel && panel.querySelector('.pchat-widget-placeholder');
+          if (!placeholder) continue;
+          placeholder.appendChild(frame);
+          if (!panel.hidden) fitReadingWidget(panel);
+        }
+      }
       function selectReadingMode(portal, mode) {
         if (!portal || !/^(video|audio|chat)$/.test(mode)) return;
         var tabs = portal.querySelectorAll('[data-mode]');
@@ -1256,6 +1288,9 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
           var active = readingPortal.querySelector('[data-widget]:not([hidden])');
           if (active) requestAnimationFrame(function () { fitReadingWidget(active); });
         }).observe(readingPortal.querySelector('.reading-widget-container'), { childList: true, subtree: true });
+        new MutationObserver(function () {
+          claimPremiumChatEmbeds();
+        }).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['src'] });
       }
       if ('ResizeObserver' in window && readingPortal) {
         new ResizeObserver(function () {
@@ -1263,6 +1298,7 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
           if (active) fitReadingWidget(active);
         }).observe(readingPortal.querySelector('.reading-widget-container'));
       }
+      claimPremiumChatEmbeds();
       placeReadingPortal();
       requestAnimationFrame(function () {
         var active = readingPortal && readingPortal.querySelector('[data-widget]:not([hidden])');
