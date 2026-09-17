@@ -121,8 +121,7 @@
     .pchat-scale-viewport { position: relative; width: 100%; height: 100%; min-width: 0; min-height: 0; overflow: hidden; isolation: isolate; contain: layout paint size; }
     .pchat-scale-canvas { --pchat-scale: 1; position: absolute; top: 0; left: 0; width: 1280px; height: 720px; min-width: 1280px; min-height: 720px; overflow: visible; transform: scale(var(--pchat-scale)); transform-origin: top left; }
     .pchat-embed-host { position: absolute; inset: 0; width: 100%; height: 100%; min-width: 0; min-height: 0; overflow: visible; }
-    /* These rules only apply after the runtime inspector has identified the
-       provider's outer node. They never affect the site's other iframes. */
+    /* Applied only to the live-reading embed after it has been located. */
     .pchat-provider-root { display: block; box-sizing: border-box; }
     iframe.pchat-provider-root,
     .pchat-provider-root > iframe { display: block; border: 0; }
@@ -1096,12 +1095,13 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
     }
   </script>
   <script>
-    /* Inspect the embed that Premium.Chat actually creates, then constrain its
-       outer node inside a deliberately large, transformed canvas.  The
-       cross-origin document remains untouched, so calls, chat and sign-in keep
-       their provider behaviour while pointer coordinates scale with the view. */
+    /* Premium.Chat creates its iframe asynchronously and may append it to the
+       document body instead of beside its loader snippet. Move only this
+       widget (not the separate availability button) into the portal as soon
+       as it appears, then size its outer provider node to the scaled canvas. */
     (function () {
       'use strict';
+      var widgetId = '1014748';
       var viewport = document.querySelector('[data-pchat-scale-viewport]');
       var canvas = document.querySelector('[data-pchat-scale-canvas]');
       var host = document.querySelector('[data-pchat-embed-host]');
@@ -1115,44 +1115,51 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
         var box = viewport.getBoundingClientRect();
         if (!box.width || !box.height) return;
         var scale = Math.min(box.width / naturalWidth, box.height / naturalHeight, 1);
-        /* CSS pixels inside the canvas are intentionally larger than the
-           parchment; the transform makes the complete provider UI fit. */
         canvas.style.width = naturalWidth + 'px';
         canvas.style.height = naturalHeight + 'px';
-        canvas.style.minWidth = naturalWidth + 'px';
-        canvas.style.minHeight = naturalHeight + 'px';
         canvas.style.setProperty('--pchat-scale', String(scale));
         canvas.style.left = Math.max(0, (box.width / scale - naturalWidth) / 2) + 'px';
         canvas.style.top = Math.max(0, (box.height / scale - naturalHeight) / 2) + 'px';
       }
 
-      function providerMatch(node) {
-        if (!node || node.nodeType !== 1) return null;
-        if (node.matches('iframe[src*="premium.chat"]')) return node;
-        return node.querySelector('iframe[src*="premium.chat"], [id*="1014748"], [class*="1014748"]');
+      function isPortalWidget(node) {
+        if (!node || node.nodeType !== 1 || node.closest('.premium-chat-corner')) return false;
+        var value = (node.id || '') + ' ' + (node.className || '') + ' ' + (node.getAttribute('src') || '');
+        return value.indexOf(widgetId) !== -1 ||
+          (node.tagName === 'IFRAME' && /premium\.chat/i.test(node.src || ''));
+      }
+
+      function providerMatch(scope) {
+        if (isPortalWidget(scope)) return scope;
+        var nodes = scope.querySelectorAll ? scope.querySelectorAll('iframe, [id], [class]') : [];
+        for (var i = 0; i < nodes.length; i++) {
+          if (isPortalWidget(nodes[i])) return nodes[i];
+        }
+        return null;
       }
 
       function outerProviderNode(node) {
         var current = node;
-        while (current.parentElement && current.parentElement !== host) current = current.parentElement;
+        while (current.parentElement && current.parentElement !== host && current.parentElement !== document.body) {
+          current = current.parentElement;
+        }
         return current;
       }
 
       function inspectProvider() {
-        var match = providerMatch(host);
+        var match = providerMatch(document.body);
         if (!match) return;
         var root = outerProviderNode(match);
-        if (!root || root === providerRoot) return;
+        if (!root || root.closest('.premium-chat-corner')) return;
+        if (root.parentNode !== host) host.appendChild(root);
+        if (root === providerRoot) {
+          fitCanvas();
+          return;
+        }
 
-        /* This is the diagnostic result of the runtime inspection: an iframe
-           is handled as an iframe; a generated wrapper is handled as its outer
-           provider container. Fixed positioning is neutralized at that outer
-           boundary rather than by styling provider controls. */
-        var style = window.getComputedStyle(root);
-        var rect = root.getBoundingClientRect();
         providerRoot = root;
         providerRoot.classList.add('pchat-provider-root');
-        host.dataset.pchatStructure = root.tagName.toLowerCase() + ':' + style.position;
+        var rect = providerRoot.getBoundingClientRect();
         if (rect.width) naturalWidth = Math.max(naturalWidth, Math.ceil(rect.width));
         if (rect.height) naturalHeight = Math.max(naturalHeight, Math.ceil(rect.height));
         providerRoot.style.position = 'absolute';
@@ -1170,7 +1177,7 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
       new MutationObserver(function () {
         inspectProvider();
         fitCanvas();
-      }).observe(host, { childList: true, subtree: true });
+      }).observe(document.body, { childList: true, subtree: true });
       if (window.ResizeObserver) new ResizeObserver(fitCanvas).observe(viewport);
       window.addEventListener('resize', fitCanvas);
       window.addEventListener('orientationchange', fitCanvas);
