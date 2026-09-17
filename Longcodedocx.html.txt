@@ -122,17 +122,17 @@
     .reading-mode-links img { display: block; width: 100%; height: 100%; object-fit: contain; }
     .reading-mode-links button[aria-selected="true"] { border-color: rgb(103 31 99 / 72%); box-shadow: 0 0 5px rgb(103 31 99 / 45%); }
     .reading-mode-links button:focus-visible { outline: 1px solid #671f63; outline-offset: 2px; }
-    /* This is only the portal's layout wrapper, not a scrolling viewport.
-       Let the Premium.Chat embed retain its own native scrolling where needed. */
-    .reading-widget-container { position: relative; flex: 1 1 auto; width: 100%; max-width: 100%; min-width: 0; min-height: 0; box-sizing: border-box; overflow: visible; }
-    .reading-widget { position: relative; width: 100%; max-width: 100%; min-width: 0; height: auto; margin: 0; box-sizing: border-box; }
+    /* The widget is a desktop-sized, provider-owned iframe. Its viewport is
+       deliberately clipped here while the iframe itself keeps its native size
+       and is scaled from the upper-left corner. */
+    .reading-widget-container { position: relative; flex: 1 1 auto; width: 100%; max-width: 100%; min-width: 0; min-height: 0; box-sizing: border-box; overflow: hidden; }
+    .reading-widget { position: relative; width: 100%; max-width: 100%; min-width: 0; height: 100%; margin: 0; box-sizing: border-box; }
     .reading-widget[hidden] { display: none !important; }
-    /* Premium.Chat injects a fixed-size, cross-origin iframe. Keep its native
-       size here so the script can measure it, then scale the whole document
-       (rather than squeezing only the iframe viewport). The placeholder has
-       no scrolling or clipping: its height is updated to the scaled height. */
-    .pchat-widget-placeholder { position: relative; display: block; width: 92%; max-width: 100%; min-width: 0; min-height: 1px; margin: 0 auto; box-sizing: border-box; isolation: isolate; }
-    .pchat-widget-placeholder > * { max-width: none !important; box-sizing: border-box; }
+    /* Premium.Chat injects a fixed-size, cross-origin iframe. JavaScript
+       supplies its measured native dimensions and a scale factor through the
+       custom properties below; CSS performs the responsive shrink-to-fit. */
+    .pchat-widget-placeholder { --pchat-scale: 1; position: relative; display: block; width: 92%; max-width: 100%; height: 100%; min-width: 0; min-height: 1px; margin: 0 auto; box-sizing: border-box; overflow: hidden; isolation: isolate; }
+    .pchat-widget-placeholder > * { position: absolute !important; top: 0; left: 0; max-width: none !important; box-sizing: border-box; transform: scale(var(--pchat-scale)) !important; transform-origin: top left !important; }
     .pchat-widget-placeholder iframe { display: block; max-width: none !important; border: 0; }
     .portal-gate { position: absolute; z-index: 4; inset: 0; overflow: hidden; background: #08020c; cursor: pointer; }
     .portal-gate[hidden] { display: none; }
@@ -1203,32 +1203,20 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
 
         // The iframe is owned by premium.chat, so its document cannot be styled
         // from this page. Measure its native box and scale that entire box.
-        root.style.removeProperty('transform');
-        root.style.removeProperty('transform-origin');
-        root.style.removeProperty('margin-left');
-        root.style.removeProperty('zoom');
-        placeholder.style.removeProperty('height');
+        root.style.removeProperty('width');
+        root.style.removeProperty('height');
         var nativeWidth = Math.max(dimension(root, 'width'), dimension(frame, 'width'));
         var nativeHeight = Math.max(dimension(root, 'height'), dimension(frame, 'height'));
         var availableWidth = placeholder.getBoundingClientRect().width;
         var availableHeight = panel.closest('.reading-widget-container').getBoundingClientRect().height;
         if (!nativeWidth || !nativeHeight || !availableWidth || !availableHeight) return;
         var scale = Math.min(1, availableWidth / nativeWidth, availableHeight / nativeHeight);
-        var scaledWidth = Math.ceil(nativeWidth * scale);
-        var scaledHeight = Math.ceil(nativeHeight * scale);
+        // Keep the provider iframe at its desktop dimensions. Scaling its
+        // element (rather than constraining its viewport) preserves the
+        // complete embedded layout, including cross-origin content.
         root.style.setProperty('width', nativeWidth + 'px', 'important');
         root.style.setProperty('height', nativeHeight + 'px', 'important');
-        root.style.setProperty('margin-left', Math.max(0, (availableWidth - scaledWidth) / 2) + 'px', 'important');
-        /* A transform can be ignored by provider-owned fixed descendants.
-           Browser zoom scales the embed's complete rendering context instead,
-           including a cross-origin iframe's own fixed desktop layout. */
-        if (window.CSS && window.CSS.supports && window.CSS.supports('zoom', '1')) {
-          root.style.setProperty('zoom', String(scale), 'important');
-        } else {
-          root.style.setProperty('transform-origin', 'top left', 'important');
-          root.style.setProperty('transform', 'scale(' + scale + ')', 'important');
-        }
-        placeholder.style.height = scaledHeight + 'px';
+        placeholder.style.setProperty('--pchat-scale', String(scale));
         panel.dataset.widgetScale = scale.toFixed(4);
         panel.dataset.widgetWidth = String(Math.round(nativeWidth));
         panel.dataset.widgetHeight = String(Math.round(nativeHeight));
