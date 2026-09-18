@@ -90,24 +90,15 @@
     .portal-header { position: relative; z-index: 20; height: 21%; max-height: none; margin-bottom: 1%; }
     .reading-portal-slot { position: absolute; z-index: 2; top: 21%; left: 0; right: 0; bottom: 0; min-width: 0; min-height: 0; overflow: hidden; }
     .live-reading-portal { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; background: #f1dfb4; }
-    .portal-background { position: absolute; z-index: 1; inset: 0; background: #f1dfb4; pointer-events: none; }
-    .portal-ui { position: absolute; z-index: 20; top: 0; left: 0; right: 0; }
-    .pchat-service-controls { display: flex; align-items: center; justify-content: center; gap: clamp(4px, 1vw, 12px); padding: 2px 3px 5px; line-height: normal; }
-    .pchat-service-button, .pchat-load-button { min-width: 0; padding: 0; border: 0; background: transparent; -webkit-tap-highlight-color: transparent; }
-    .pchat-service-button { width: min(31%, 145px); }
-    .pchat-service-button img { display: block; width: 100%; height: auto; }
-    .pchat-service-button[aria-pressed="true"] { transform: translateY(-1px); }
-    .pchat-service-button:focus-visible, .pchat-load-button:focus-visible { outline: 2px solid #3c172d; outline-offset: 2px; }
-    .pchat-load-button { display: block; margin: 0 auto 2px; color: #3c172d; font: 700 clamp(11px, 1.4vw, 15px)/1 Lora, Georgia, serif; text-transform: uppercase; }
-    #reading-portal-widget { position: absolute; z-index: 10; inset: 0; overflow: hidden; isolation: isolate; }
-    #premium-chat-host { position: absolute; inset: 0; overflow: hidden; }
-    #premium-chat-host > * { transform-origin: top left !important; }
-    .pchat-provider-root { display: block; box-sizing: border-box; max-width: none !important; max-height: none !important; }
+    .pchat-scale-viewport { position: relative; width: 100%; height: 100%; min-width: 0; min-height: 0; overflow: hidden; isolation: isolate; contain: layout paint size; }
+    .pchat-scale-canvas { --pchat-scale: 1; position: absolute; top: 0; left: 0; width: 1280px; height: 720px; min-width: 1280px; min-height: 720px; overflow: visible; transform: scale(var(--pchat-scale)); transform-origin: top left; }
+    .pchat-embed-host { position: absolute; inset: 0; width: 100%; height: 100%; min-width: 0; min-height: 0; overflow: visible; }
+    .pchat-provider-root { display: block; box-sizing: border-box; }
     iframe.pchat-provider-root, .pchat-provider-root > iframe { display: block; border: 0; }
     .pchat-loading { position: absolute; z-index: 2; inset: 0; display: grid; place-items: center; padding: 1rem; color: #3c172d; background: #f1dfb4; font: 700 clamp(12px, 1.6vw, 16px)/1.35 Lora, Georgia, serif; letter-spacing: .04em; text-align: center; }
     .pchat-loading[hidden] { display: none; }
     .portal-gate { position: absolute; z-index: 5; inset: 0; overflow: hidden; background: #08020c; }
-    .portal-gate[hidden], .portal-ui[hidden], #reading-portal-widget[hidden], #premium-chat-host[hidden] { display: none; }
+    .portal-gate[hidden] { display: none; }
     .portal-gate picture { position: absolute; inset: 0; display: block; width: 100%; height: 100%; margin: 0; padding: 0; }
     .portal-gate img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; margin: 0; object-fit: fill; object-position: 50% 0; }
     .portal-gate:focus-visible { outline: 2px solid #fff; outline-offset: -3px; }
@@ -612,13 +603,11 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
       <h1 class="sr-only">Live Reading Portal</h1>
       <img class="panel-header portal-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949649/C2604EB8-27DF-4E1C-953B-87B9235FAC6F_nh2zt0.png" alt="Premium.chat">
       <div class="reading-portal-slot" data-reading-portal-slot><div class="live-reading-portal" data-reading-portal>
-        <div class="portal-background" aria-hidden="true"></div>
-        <div class="portal-ui" data-portal-ui hidden>
-          <button class="pchat-load-button" type="button" data-action="load-reading-portal">Load Reading Portal</button>
-          <div class="pchat-service-controls" role="group" aria-label="Choose a live reading service">
-            <button class="pchat-service-button" type="button" data-pchat-service="chat" aria-label="Keyboard Chat" aria-pressed="true"><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789727700/1982B274-FC39-49E9-8270-CED8E5A01F9C_sauvu8.png" alt=""></button>
-            <button class="pchat-service-button" type="button" data-pchat-service="video" aria-label="Video Chat" aria-pressed="false"><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789727700/CE3E5173-CED6-428E-8E01-A59609D988DD_rjthwr.png" alt=""></button>
-            <button class="pchat-service-button" type="button" data-pchat-service="audio" aria-label="Audio Call" aria-pressed="false"><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789727700/51BBA94C-0337-4B97-B47C-139AC69EA5E0_l9fd0y.png" alt=""></button>
+        <div class="pchat-scale-viewport" data-pchat-scale-viewport>
+          <div class="pchat-scale-canvas" data-pchat-scale-canvas>
+            <div class="pchat-embed-host" data-pchat-embed-host>
+              <div class="pchat-widget-placeholder"></div><script type="text/javascript">(function(d,w,i){w.premiumchat=w.premiumchat||[];var p=w.premiumchat;if(!p.length){(()=>{w.premiumchat_domain='https://premium.chat/';var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://premium.chat/embed/js/widget.js';var ss=d.getElementsByTagName('script')[0];ss.parentNode.insertBefore(s,ss);})();}p.push({'num':p.length,'wid':i});})(document,window,1014748);</script>
+            </div>
           </div>
         </div>
         <div id="reading-portal-widget" hidden aria-live="polite">
@@ -1050,14 +1039,109 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
     });
   </script>
   <script>
+    /* Premium.Chat creates its iframe asynchronously and may append it to the
+       document body instead of beside its loader snippet. Move only this
+       widget (not the separate availability button) into the portal as soon
+       as it appears, then size its outer provider node to the scaled canvas. */
     /* Premium.Chat appends its real interface asynchronously.  This controller
        watches only for the requested Premium.Chat service and moves that real
        provider node into the visible reading portal once it exists. */
     (function () {
       'use strict';
-      var services = { chat: '1014748', video: '1016625', audio: '1016623' };
+      var widgetId = '1014748';
+      var viewport = document.querySelector('[data-pchat-scale-viewport]');
+      var canvas = document.querySelector('[data-pchat-scale-canvas]');
+      var host = document.querySelector('[data-pchat-embed-host]');
+      if (!viewport || !canvas || !host) return;
+
       var naturalWidth = 1280;
       var naturalHeight = 720;
+      var providerRoot;
+
+      function fitCanvas() {
+        var box = viewport.getBoundingClientRect();
+        if (!box.width || !box.height) return;
+        var scale = Math.min(box.width / naturalWidth, box.height / naturalHeight, 1);
+        canvas.style.width = naturalWidth + 'px';
+        canvas.style.height = naturalHeight + 'px';
+        canvas.style.setProperty('--pchat-scale', String(scale));
+        canvas.style.left = Math.max(0, (box.width / scale - naturalWidth) / 2) + 'px';
+        canvas.style.top = Math.max(0, (box.height / scale - naturalHeight) / 2) + 'px';
+      }
+
+      function isPortalWidget(node) {
+        if (!node || node.nodeType !== 1 || node.closest('.premium-chat-corner')) return false;
+        var value = (node.id || '') + ' ' + (node.className || '') + ' ' + (node.getAttribute('src') || '');
+        return value.indexOf(widgetId) !== -1 ||
+          (node.tagName === 'IFRAME' && /premium\.chat/i.test(node.src || ''));
+      }
+
+      function providerMatch(scope) {
+        if (isPortalWidget(scope)) return scope;
+        var nodes = scope.querySelectorAll ? scope.querySelectorAll('iframe, [id], [class]') : [];
+        for (var i = 0; i < nodes.length; i++) {
+          if (isPortalWidget(nodes[i])) return nodes[i];
+        }
+        return null;
+      }
+
+      function outerProviderNode(node) {
+        var current = node;
+        while (current.parentElement && current.parentElement !== host && current.parentElement !== document.body) {
+          current = current.parentElement;
+        }
+        return current;
+      }
+
+      function inspectProvider() {
+        var match = providerMatch(document.body);
+        if (!match) return;
+        var root = outerProviderNode(match);
+        if (!root || root.closest('.premium-chat-corner')) return;
+        if (root.parentNode !== host) host.appendChild(root);
+        if (root === providerRoot) {
+          fitCanvas();
+          return;
+        }
+
+        providerRoot = root;
+        providerRoot.classList.add('pchat-provider-root');
+        var rect = providerRoot.getBoundingClientRect();
+        if (rect.width) naturalWidth = Math.max(naturalWidth, Math.ceil(rect.width));
+        if (rect.height) naturalHeight = Math.max(naturalHeight, Math.ceil(rect.height));
+        providerRoot.style.position = 'absolute';
+        providerRoot.style.left = '-383.5px';
+        providerRoot.style.top = '0';
+        providerRoot.style.width = naturalWidth + 'px';
+        providerRoot.style.height = naturalHeight + 'px';
+        providerRoot.style.maxWidth = 'none';
+        providerRoot.style.maxHeight = 'none';
+        providerRoot.style.minWidth = '0';
+        providerRoot.style.minHeight = '0';
+        fitCanvas();
+      }
+
+      new MutationObserver(function () {
+        inspectProvider();
+        fitCanvas();
+      }).observe(document.body, { childList: true, subtree: true });
+      if (window.ResizeObserver) new ResizeObserver(fitCanvas).observe(viewport);
+      window.addEventListener('resize', fitCanvas);
+      window.addEventListener('orientationchange', fitCanvas);
+      inspectProvider();
+      fitCanvas();
+    }());
+  </script>
+
+  <script>
+    (function () {
+      'use strict';
+      var gates = document.querySelectorAll('.portal-gate');
+      function openGate(gate) { gate.hidden = true; }
+      for (var g = 0; g < gates.length; g++) {
+        gates[g].addEventListener('click', function () { openGate(this); });
+        gates[g].addEventListener('keydown', function (event) { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openGate(this); } });
+      }
       var portal = document.querySelector('[data-reading-portal]');
       var portalUI = document.querySelector('[data-portal-ui]');
       var portalGate = document.querySelectorAll('.portal-gate');
