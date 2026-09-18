@@ -100,7 +100,9 @@
     .pchat-embed-host { position: absolute; inset: 0; width: 100%; height: 100%; min-width: 0; min-height: 0; overflow: visible; }
     .pchat-provider-root { display: block; box-sizing: border-box; }
     iframe.pchat-provider-root, .pchat-provider-root > iframe { display: block; border: 0; }
-    .pchat-loading { position: absolute; z-index: 2; inset: 0; display: grid; place-items: center; padding: 1rem; color: #3c172d; background: #f1dfb4; font: 700 clamp(12px, 1.6vw, 16px)/1.35 Lora, Georgia, serif; letter-spacing: .04em; text-align: center; }
+    /* Loading announcements remain available to assistive technology without
+       covering the provider while Premium.Chat finishes its asynchronous load. */
+    .pchat-loading { position: absolute; z-index: 2; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; pointer-events: none; }
     .pchat-loading[hidden] { display: none; }
     .portal-gate { position: absolute; z-index: 5; inset: 0; overflow: hidden; background: #08020c; }
     .portal-gate[hidden] { display: none; }
