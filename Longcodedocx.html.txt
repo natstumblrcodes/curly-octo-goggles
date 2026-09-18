@@ -106,7 +106,13 @@
     .order-form-wrap, .appointment-form-wrap { width: 100%; max-width: 100%; min-width: 0; margin: 0 auto; padding: 0 0 1.5rem; box-sizing: border-box; overflow-x: hidden; }
     .jotform-order-frame, .jotform-appointment-frame { display: block; width: 100%; min-width: 0; max-width: 100%; height: 539px; margin: 0; border: 0; box-sizing: border-box; }
     .schedule-copy { white-space: pre-line; }
-    .portal-view { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; overflow: hidden; isolation: isolate; }
+    .portal-view {
+      position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; overflow: hidden;
+      isolation: isolate;
+      /* Keep the portal artwork anchored to the parchment panel beneath the
+         chat widget. The gate remains the topmost portal layer when shown. */
+      background: #f1dfb4 url("https://res.cloudinary.com/dgpfj9fox/image/upload/v1789711786/5FD2C893-D064-49EA-BE11-BDC45E834DF1_ebeusq.png") center center / cover no-repeat;
+    }
     /* Content panels normally reserve a scrollbar for long-form copy.  The
        portal is a fixed artwork view, so do not turn its panel into a second
        scroll container around the provider-owned widget. */
@@ -291,7 +297,8 @@
     <!-- ABOUT CONTENT -->
     <section class="content-section" data-section="about" hidden>
       <article class="article-copy about-copy">
-        <h1>About Natalie</h1>
+        <h1 class="sr-only">About Natalie</h1>
+        <img class="panel-header section-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949649/DE116E68-34FA-4218-9149-7AF90FF52C81_uc4gfc.png" alt="About Natalie">
         <p class="about-subtitle"><strong>A Life Guided by Curiosity, Intuition &amp; the Search for Meaning</strong></p>
         <img class="about-portrait" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788716416/22CB0AC6-B355-4152-ABD6-5DB0C33693B0_t4tklv.png" alt="Natalie D. Holcomb" loading="lazy">
         <p>Natalie Holcomb, née Davis, was born in Northampton, Massachusetts, in 1986. At the age of three, she moved with her family to Northern California, spending a year in Bonny Doon before eventually making Davis, California, her childhood home.</p>
@@ -356,7 +363,8 @@
     </section>
     <!-- SERVICES CONTENT -->
     <section class="content-section" data-section="services" hidden>
-  <h1>Services</h1>
+  <h1 class="sr-only">Services</h1>
+  <img class="panel-header section-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949648/2504854D-4436-48AC-90A8-4FF0E5A79313_brl65g.png" alt="Services">
   <article class="article-copy services-copy">
     <p>You do not need to know anything about tarot, oracle cards, or other card-reading systems to book a reading. You can simply tell me what you would like to ask about, and I can select the cards, deck, and spread that are appropriate for your question.</p>
     <p>If you are already familiar with card reading and have preferences, you can also make those choices yourself.</p>
@@ -626,7 +634,8 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
     </section>
     <!-- PLACE ORDER CONTENT -->
     <section class="content-section order-section" data-section="order" hidden>
-      <h1>Place Order</h1>
+      <h1 class="sr-only">Place Order</h1>
+      <img class="panel-header section-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949647/C26936FD-B2C1-48D6-A696-E6DB9D4E0CC8_k7wzas.png" alt="Place Order">
       <div class="order-form-wrap">
         <iframe
           id="JotFormIFrame-262545759554167-desktop"
@@ -708,7 +717,8 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
     <!-- ABOUT CONTENT -->
     <section class="content-section" data-section="about" hidden>
       <article class="article-copy about-copy">
-        <h1>About Natalie</h1>
+        <h1 class="sr-only">About Natalie</h1>
+        <img class="panel-header section-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949649/DE116E68-34FA-4218-9149-7AF90FF52C81_uc4gfc.png" alt="About Natalie">
         <p class="about-subtitle"><strong>A Life Guided by Curiosity, Intuition &amp; the Search for Meaning</strong></p>
         <img class="about-portrait" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788716416/22CB0AC6-B355-4152-ABD6-5DB0C33693B0_t4tklv.png" alt="Natalie D. Holcomb" loading="lazy">
         <p>Natalie Holcomb, née Davis, was born in Northampton, Massachusetts, in 1986. At the age of three, she moved with her family to Northern California, spending a year in Bonny Doon before eventually making Davis, California, her childhood home.</p>
@@ -773,7 +783,8 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
     </section>
     <!-- SERVICES CONTENT -->
     <section class="content-section" data-section="services" hidden>
-  <h1>Services</h1>
+  <h1 class="sr-only">Services</h1>
+  <img class="panel-header section-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949648/2504854D-4436-48AC-90A8-4FF0E5A79313_brl65g.png" alt="Services">
   <article class="article-copy services-copy">
     <p>You do not need to know anything about tarot, oracle cards, or other card-reading systems to book a reading. You can simply tell me what you would like to ask about, and I can select the cards, deck, and spread that are appropriate for your question.</p>
     <p>If you are already familiar with card reading and have preferences, you can also make those choices yourself.</p>
@@ -1043,7 +1054,8 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
     </section>
     <!-- PLACE ORDER CONTENT -->
     <section class="content-section order-section" data-section="order" hidden>
-      <h1>Place Order</h1>
+      <h1 class="sr-only">Place Order</h1>
+      <img class="panel-header section-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949647/C26936FD-B2C1-48D6-A696-E6DB9D4E0CC8_k7wzas.png" alt="Place Order">
       <div class="order-form-wrap">
         <iframe
           id="JotFormIFrame-262545759554167-mobile"
