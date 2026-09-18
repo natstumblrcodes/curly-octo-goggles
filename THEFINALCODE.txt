@@ -9,6 +9,7 @@
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
   <meta name="keywords" content="Alchemical Visions, AlchemicalVisions.com, Natalie D. Holcomb, live psychic readings, online psychic readings, psychic advisor, psychic guidance, intuitive reading, clairvoyance, spiritual guidance, text psychic reading, audio psychic reading, video psychic reading, astrology, astrology readings, online astrology readings, astrology consultation, personalized astrology reports, hand calculated astrology report, birth chart reading, natal chart analysis, personalized horoscope, zodiac signs, sun sign, moon sign, rising sign, planetary aspects, retrograde planets, planetary transits, Saturn return, progressed chart, solar return, eclipse astrology, karmic astrology, soul purpose, astrocartography, Western astrology, Vedic astrology, predictive astrology, relationship astrology, spiritual astrology, astrology and alchemy, psychic consultation, psychic insight, psychic intuition, clairaudience, clairsentience, claircognizance, aura reading, energy reading, spirit communication, mediumship, dream interpretation, numerology, spiritual awakening, divine timing, alchemy, alchemical wisdom, alchemical symbolism, alchemical transformation, spiritual alchemy, inner alchemy, hermetic alchemy, philosopher’s stone, solve et coagula, nigredo, albedo, citrinitas, rubedo, magnum opus, ouroboros, spiritual transmutation">
   <link rel="canonical" href="https://www.AlchemicalVisions.com/">
+  <link rel="icon" href="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789727700/8398B28E-04AD-4B6A-9090-30270E8305B2_krdjoq.png">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Alchemical Visions">
   <meta property="og:title" content="Alchemical Visions | Psychic Readings &amp; Astrology Reports">
@@ -41,34 +42,12 @@
       border: 0; border-radius: 44% 44% 35% 35%;
       color: transparent; font-size: 0; line-height: normal;
       -webkit-tap-highlight-color: transparent;
-      transition: filter .15s, transform .08s;
+      transition: transform .08s;
     }
-    .hotspot::after { content: ""; position: absolute; pointer-events: none; opacity: 0; transition: opacity .15s; }
-    .potion::before, .potion::after { content: ""; position: absolute; z-index: 1; pointer-events: none; opacity: 0; transition: opacity .15s; }
-    /* Two transparent pieces join into one heart-perimeter line: rounded lobes
-       above and the tapered V below. No fill is painted over the bottle art. */
-    .potion::before { left: 12%; top: 19%; width: 76%; height: 35%; border: 1.5px solid var(--halo); border-bottom: 0; border-radius: 52% 52% 18% 18% / 70% 70% 20% 20%; box-shadow: 0 0 3px var(--halo); }
-    .potion::after { left: 22%; top: 39%; width: 56%; aspect-ratio: 1; border-right: 1.5px solid var(--halo); border-bottom: 1.5px solid var(--halo); transform: rotate(45deg); border-radius: 0 0 18% 0; filter: drop-shadow(2px 2px 3px var(--halo)); }
-    .d-home, .m-home { --halo: #ff2424; }
-    .d-news, .m-news { --halo: #7424ff; }
-    .d-about, .m-about { --halo: #ff9a24; }
-    .d-services, .m-services { --halo: #ff2fa3; }
-    .d-reports, .m-reports { --halo: #ffc52e; }
-    .d-schedule, .m-schedule { --halo: #f4f7fa; }
-    .d-book, .m-book { --halo: #246bff; }
-    .d-order, .m-order { --halo: #24e65c; }
-    .hotspot:hover, .hotspot:focus-visible { outline: 0; }
-    .hotspot:hover::after, .hotspot:focus-visible::after, .hotspot:active::after,
-    .potion:hover::before, .potion:focus-visible::before, .potion:active::before { opacity: 1; }
-    .hotspot:active {
-      transform: scale(.98);
-    }
+    .hotspot:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+    .hotspot:active { transform: scale(.98); }
     .circle { border-radius: 50%; }
-    .circle::after { inset: 5%; border: 1.5px solid #fff; border-radius: 50%; background: transparent; box-shadow: 0 0 3px #fff; }
     .d-portal, .m-portal { border-radius: 42%; }
-    .d-portal::after, .m-portal::after { inset: 7% 2%; border: 1.5px solid #fff; border-radius: 45%; background: transparent; box-shadow: 0 0 3px #fff; }
-    .d-contact:hover, .d-contact:focus-visible, .m-contact:hover, .m-contact:focus-visible,
-    .d-portal:hover, .d-portal:focus-visible, .m-portal:hover, .m-portal:focus-visible { filter: drop-shadow(0 0 7px #fff) drop-shadow(0 0 15px #fff); }
     .content-panel { position: absolute; line-height: normal; z-index: 6; overflow-y: scroll; overflow-x: hidden; color: #24120a; background: #f1dfb4; scrollbar-color: #51285f #d4ba83; scrollbar-width: auto; scrollbar-gutter: stable; }
     .content-panel::-webkit-scrollbar { width: 12px; }
     .content-panel::-webkit-scrollbar-track { background: #d4ba83; border-left: 1px solid #694b34; }
@@ -103,8 +82,8 @@
     .astrology-copy h2 { margin: 1.45em 0 .55em; color: #3c172d; font-size: 1.2em; line-height: 1.25; text-align: center; }
     .astrology-art { display: block; width: min(92%, 520px); max-width: 100%; height: auto; margin: 1.25em auto; object-fit: contain; }
     .symbol-key, .asteroid-list { list-style: none; padding-left: 0 !important; }
-    .order-form-wrap, .appointment-form-wrap { width: 100%; max-width: 100%; min-width: 0; margin: 0 auto; padding: 0 0 1.5rem; box-sizing: border-box; overflow-x: hidden; }
-    .jotform-order-frame, .jotform-appointment-frame { display: block; width: 100%; min-width: 0; max-width: 100%; height: 539px; margin: 0; border: 0; box-sizing: border-box; }
+    .lightbox-trigger { margin-top: 16px; text-transform: uppercase; font-size: 14px; text-decoration: none; cursor: pointer; display: inline-block; padding: 10px; font-family: inherit; text-shadow: none; user-select: none; transition: all .1s ease-in; background-color: #FFA500; border: 1px solid #FFA500; color: #FFFFFF; }
+    .lightbox-trigger:focus-visible { outline: 2px solid #3c172d; outline-offset: 3px; }
     .schedule-copy { white-space: pre-line; }
         .portal-view {
       position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; overflow: hidden;
@@ -117,57 +96,32 @@
        scroll container around the provider-owned widget. */
     .content-panel:has(.portal-view:not([hidden])) { overflow-y: clip; scrollbar-gutter: auto; }
     .portal-header { position: relative; height: 21%; max-height: none; margin-bottom: 1%; }
-    /* One chat portal is moved between the desktop and mobile artwork panels. */
-    .portal-header {
-  position: relative;
-  height: 21%;
-  max-height: none;
-  margin-bottom: 1%;
-}
-
-.reading-portal-slot {
-  position: absolute;
-  z-index: 2;
-  top: 21%;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  min-width: 0;
-  min-height: 0;
-  overflow: hidden;
-}
-
-.live-reading-portal {
-  position: absolute;
-  z-index: 2;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  overflow: hidden;
-}
-  
-    /* Premium.Chat renders for a browser-sized canvas.  This viewport clips
-       that canvas to the parchment while its child supplies and scales down a
-       larger coordinate space.  It is deliberately not a 100%-sized iframe. */
-    .pchat-scale-viewport { position: relative; width: 100%; height: 100%; min-width: 0; min-height: 0; overflow: hidden; isolation: isolate; contain: layout paint size; }
-    .pchat-scale-canvas { --pchat-scale: 1; position: absolute; top: 0; top left: 0; width: 1280px; height: 720px; min-width: 1280px; min-height: 720px; overflow: visible; transform: scale(0.39); transform-origin: top left; }
+    /* One shared portal moves between the desktop and mobile artwork panels. */
+    .reading-portal-slot { position: absolute; z-index: 2; top: 21%; left: 0; right: 0; bottom: 0; min-width: 0; min-height: 0; overflow: hidden; }
+    .live-reading-portal { position: absolute; z-index: 2; inset: 0; display: flex; flex-direction: column; width: 100%; height: 100%; padding: 0; overflow: hidden; }
+    .pchat-service-controls { display: flex; flex: 0 0 auto; align-items: center; justify-content: center; gap: clamp(4px, 1vw, 12px); padding: 2px 3px 5px; line-height: normal; }
+    .pchat-service-button { width: min(31%, 145px); min-width: 0; padding: 0; border: 0; background: transparent; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .pchat-service-button img { display: block; width: 100%; height: auto; }
+    .pchat-service-button[aria-pressed="true"] { transform: translateY(-1px); }
+    .pchat-service-button:focus-visible { outline: 2px solid #3c172d; outline-offset: 2px; }
+    /* Premium.Chat renders for a browser-sized canvas. This viewport clips the
+       large provider while the canvas preserves its expected coordinate space. */
+    .pchat-scale-viewport { position: relative; flex: 1 1 auto; width: 100%; min-width: 0; min-height: 0; overflow: hidden; isolation: isolate; contain: layout paint size; }
+    .pchat-scale-canvas { --pchat-scale: 1; position: absolute; top: 0; left: 0; width: 1280px; height: 720px; min-width: 1280px; min-height: 720px; overflow: visible; transform: scale(.39); transform-origin: top left; }
     .pchat-embed-host { position: absolute; inset: 0; width: 100%; height: 100%; min-width: 0; min-height: 0; overflow: visible; }
-    /* Applied only to the live-reading embed after it has been located. */
     .pchat-provider-root { display: block; box-sizing: border-box; }
-    iframe.pchat-provider-root,
-    .pchat-provider-root > iframe { display: block; border: 0; }
+    iframe.pchat-provider-root, .pchat-provider-root > iframe { display: block; border: 0; }
     .portal-gate { position: absolute; z-index: 4; inset: 0; overflow: hidden; background: #08020c; cursor: pointer; }
     .portal-gate[hidden] { display: none; }
     .portal-gate picture { position: absolute; inset: 0; display: block; width: 100%; height: 100%; margin: 0; padding: 0; }
     .portal-gate img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; margin: 0; object-fit: fill; object-position: 50% 0; }
-    .portal-gate::after { content: ""; position: absolute; border: 1.5px solid #fff; border-radius: 999px;c opacity: 0; pointer-events: none; background: transparent; box-shadow: 0 0 3px #fff; transition: opacity .15s; }
-    .layout-desktop .portal-gate::after { left: 31%; bottom: 7.5%; width: 38%; height: 12%; }
-    .layout-mobile .portal-gate::after { left: 24%; bottom: 6%; width: 52%; height: 11%; }
-    .portal-gate:hover::after, .portal-gate:focus-visible::after, .portal-gate:active::after { opacity: 1; }
     .portal-gate:focus-visible { outline: 2px solid #fff; outline-offset: -3px; }
     .premium-chat-corner { position: fixed; right: 0; bottom: 0; margin: 0; padding: 0; z-index: 2147483000; line-height: normal; }
     .premium-chat-corner > * { margin: 0 !important; }
+    @media (hover: hover) and (pointer: fine) {
+      html, body { cursor: url("https://res.cloudinary.com/dgpfj9fox/image/upload/v1789727700/0853FA8B-5EC0-4072-83C3-FFBE686A143B_xfby2q.png") 4 4, auto; }
+      a[href], area[href], button, [role="button"], .premium-chat-corner, .premium-chat-corner *, .pchat-provider-root iframe { cursor: url("https://res.cloudinary.com/dgpfj9fox/image/upload/v1789727700/4C9CD2E6-01A3-484B-94AC-96286B04395C_uujpqu.png") 4 4, pointer; }
+    }
     .ambient-sound-toggle {
       position: fixed; top: 14px; right: 14px; z-index: 2147483646;
       width: 36px; height: 36px; min-width: 36px; min-height: 36px;
@@ -276,7 +230,7 @@
       .sparkle:nth-child(5n + 4) { top: 65%; }
       .sparkle:nth-child(5n) { top: 84%; }
       .bubble { bottom: 8%; opacity: .62; }
-      .hotspot, .hotspot::before, .hotspot::after, .portal-gate::after { transition: none; }
+      .hotspot { transition: none; }
     }
   </style>
 </head>
@@ -644,36 +598,12 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
     <!-- BOOK APPOINTMENT CONTENT -->
     <section class="content-section appointment-section" data-section="appointment" hidden>
       <h1 class="sr-only">Book Appointment</h1>
-      <img class="panel-header section-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949648/1B175689-30E3-498F-85E1-9F7E7DA450A0_wy1ktm.png" alt="Book Appointment">
-      <div class="appointment-form-wrap">
-        <iframe
-          id="JotFormIFrame-262546480507056-desktop"
-          class="jotform-appointment-frame"
-          title="Book Appointment"
-          allowtransparency="true"
-          allow="geolocation; microphone; camera; fullscreen; payment"
-          src="https://form.jotform.com/262546480507056"
-          frameborder="0"
-          scrolling="no"
-        ></iframe>
-      </div>
+      <button class="btn lightbox-262546480507056 lightbox-trigger" type="button" data-lightbox="appointment">Book Appointment</button>
     </section>
     <!-- PLACE ORDER CONTENT -->
     <section class="content-section order-section" data-section="order" hidden>
-      <h1 class="sr-only">Place Order</h1>
-      <img class="panel-header section-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949647/C26936FD-B2C1-48D6-A696-E6DB9D4E0CC8_k7wzas.png" alt="Place Order">
-      <div class="order-form-wrap">
-        <iframe
-          id="JotFormIFrame-262545759554167-desktop"
-          class="jotform-order-frame"
-          title="Responsive Product Order Form"
-          allowtransparency="true"
-          allow="geolocation; microphone; camera; fullscreen; payment"
-          src="https://pci.jotform.com/form/262545759554167"
-          frameborder="0"
-          scrolling="no"
-        ></iframe>
-      </div>
+      <h1 class="sr-only">Place Order: Astrology Reports</h1>
+      <button class="btn lightbox-262545759554167 lightbox-trigger" type="button" data-lightbox="order">Place Order: Astrology Reports</button>
     </section>
     <!-- CONTACT CONTENT -->
     <section class="content-section" data-section="contact" hidden><h1>Contact Me</h1><p><a href="mailto:Contact@AlchemicalVisions.com">Contact@AlchemicalVisions.com</a></p></section>
@@ -682,14 +612,27 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
       <h1 class="sr-only">Live Reading Portal</h1>
       <img class="panel-header portal-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949649/C2604EB8-27DF-4E1C-953B-87B9235FAC6F_nh2zt0.png" alt="Premium.chat">
       <div class="reading-portal-slot" data-reading-portal-slot><div class="live-reading-portal" data-reading-portal>
-        <div class="pchat-scale-viewport" data-pchat-scale-viewport>
-          <div class="pchat-scale-canvas" data-pchat-scale-canvas>
-            <!-- The provider is given this larger canvas, then the canvas is scaled as one interactive unit. -->
-            <div class="pchat-embed-host" data-pchat-embed-host>
-              <div class="pchat-widget-placeholder"></div><script type="text/javascript">(function(d,w,i){w.premiumchat=w.premiumchat||[];var p=w.premiumchat;if(!p.length){(()=>{w.premiumchat_domain='https://premium.chat/';var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src=w.premiumchat_domain+'embed/js/widget.js';var ss=d.getElementsByTagName('script')[0];ss.parentNode.insertBefore(s,ss);})();}p.push({'num':p.length,'wid':i});})(document,window,1014748);</script>
-            </div>
-          </div>
+        <div class="pchat-service-controls" role="group" aria-label="Choose a live reading service">
+          <button class="pchat-service-button" type="button" data-pchat-service="chat" aria-label="Chat" aria-pressed="true"><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789727700/1982B274-FC39-49E9-8270-CED8E5A01F9C_sauvu8.png" alt=""></button>
+          <button class="pchat-service-button" type="button" data-pchat-service="video" aria-label="Video" aria-pressed="false"><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789727700/CE3E5173-CED6-428E-8E01-A59609D988DD_rjthwr.png" alt=""></button>
+          <button class="pchat-service-button" type="button" data-pchat-service="audio" aria-label="Phone / Audio" aria-pressed="false"><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789727700/51BBA94C-0337-4B97-B47C-139AC69EA5E0_l9fd0y.png" alt=""></button>
         </div>
+        <div class="pchat-scale-viewport" data-pchat-scale-viewport><div class="pchat-scale-canvas" data-pchat-scale-canvas><div class="pchat-embed-host" data-pchat-embed-host>
+          <div class="pchat-widget-placeholder"></div><script type="text/javascript">(function(d,w,i){w.premiumchat=w.premiumchat||[];var p=w.premiumchat;if(!p.length){(()=>{w.premiumchat_domain='https://premium.chat/';var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src=w.premiumchat_domain+'embed/js/widget.js';var ss=d.getElementsByTagName('script')[0];ss.parentNode.insertBefore(s,ss);})();}p.push({'num':p.length,'wid':i});})(document,window,1014748);</script>
+        </div></div></div>
+        <!-- Inert templates retain the supplied Premium.Chat embeds for the
+             on-demand Video and Phone / Audio services. Only the selected
+             template is registered, so providers are never stacked. -->
+        <template data-pchat-template="video"><div class="pchat-widget-placeholder"></div><script type='text/javascript'>(function(d,w,i){w.premiumchat = w.premiumchat || [];var p = w.premiumchat; if(!p.length){(()=>{
+
+w.premiumchat_domain = 'https://premium.chat/';var s = d.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = w.premiumchat_domain+'embed/js/widget.js'; var ss = d.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);})();}
+
+p.push({'num': p.length, 'wid': i});})(document, window,1016625);</script></template>
+        <template data-pchat-template="audio"><div class="pchat-widget-placeholder"></div><script type='text/javascript'>(function(d,w,i){w.premiumchat = w.premiumchat || [];var p = w.premiumchat; if(!p.length){(()=>{
+
+w.premiumchat_domain = 'https://premium.chat/';var s = d.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = w.premiumchat_domain+'embed/js/widget.js'; var ss = d.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);})();}
+
+p.push({'num': p.length, 'wid': i});})(document, window,1016623);</script></template>
       </div></div>
       <div class="portal-gate" role="button" tabindex="0" aria-label="Enter the Live Reading Portal"><picture><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788991611/IMG_4391_vicok8.png" alt="Enter the Live Reading Portal"></picture></div>
     </section>
@@ -1064,36 +1007,12 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
     <!-- BOOK APPOINTMENT CONTENT -->
     <section class="content-section appointment-section" data-section="appointment" hidden>
       <h1 class="sr-only">Book Appointment</h1>
-      <img class="panel-header section-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949648/1B175689-30E3-498F-85E1-9F7E7DA450A0_wy1ktm.png" alt="Book Appointment">
-      <div class="appointment-form-wrap">
-        <iframe
-          id="JotFormIFrame-262546480507056-mobile"
-          class="jotform-appointment-frame"
-          title="Book Appointment"
-          allowtransparency="true"
-          allow="geolocation; microphone; camera; fullscreen; payment"
-          src="https://form.jotform.com/262546480507056"
-          frameborder="0"
-          scrolling="no"
-        ></iframe>
-      </div>
+      <button class="btn lightbox-262546480507056 lightbox-trigger" type="button" data-lightbox="appointment">Book Appointment</button>
     </section>
     <!-- PLACE ORDER CONTENT -->
     <section class="content-section order-section" data-section="order" hidden>
-      <h1 class="sr-only">Place Order</h1>
-      <img class="panel-header section-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949647/C26936FD-B2C1-48D6-A696-E6DB9D4E0CC8_k7wzas.png" alt="Place Order">
-      <div class="order-form-wrap">
-        <iframe
-          id="JotFormIFrame-262545759554167-mobile"
-          class="jotform-order-frame"
-          title="Responsive Product Order Form"
-          allowtransparency="true"
-          allow="geolocation; microphone; camera; fullscreen; payment"
-          src="https://pci.jotform.com/form/262545759554167"
-          frameborder="0"
-          scrolling="no"
-        ></iframe>
-      </div>
+      <h1 class="sr-only">Place Order: Astrology Reports</h1>
+      <button class="btn lightbox-262545759554167 lightbox-trigger" type="button" data-lightbox="order">Place Order: Astrology Reports</button>
     </section>
     <!-- CONTACT CONTENT -->
     <section class="content-section" data-section="contact" hidden><h1>Contact Me</h1><p><a href="mailto:Contact@AlchemicalVisions.com">Contact@AlchemicalVisions.com</a></p></section>
@@ -1124,72 +1043,84 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
     <area shape="rect" coords="143,252,236,406" data-route="home" href="#home" alt="Home"><area shape="rect" coords="235,252,322,406" data-route="news" href="#news" alt="News"><area shape="rect" coords="322,252,410,406" data-route="about" href="#about" alt="About"><area shape="rect" coords="409,252,499,406" data-route="services" href="#services" alt="Services"><area shape="rect" coords="498,252,590,406" data-route="astrology" href="#astrology" alt="Astrology Reports"><area shape="rect" coords="589,252,679,406" data-route="schedule" href="#schedule" alt="Schedule"><area shape="rect" coords="678,252,771,406" data-route="appointment" href="#appointment" alt="Book Appointment"><area shape="rect" coords="769,252,862,406" data-route="order" href="#order" alt="Place Order"><area shape="circle" coords="744,666,83" href="mailto:Contact@AlchemicalVisions.com" target="_blank" alt="Contact Me"><area shape="rect" coords="337,648,603,731" data-route="portal" href="#portal" alt="Live Reading Portal"><area shape="rect" coords="1206,946,1253,999" href="https://www.facebook.com/alchemicalvisions/" alt="Facebook"><area shape="rect" coords="1263,946,1310,999" href="https://www.instagram.com/alchemicalvisions/" alt="Instagram"><area shape="rect" coords="1321,946,1368,999" href="https://www.x.com/alchemicalvisions" alt="X / Twitter"><area shape="rect" coords="1378,946,1425,999" href="mailto:Contact@AlchemicalVisions.com" alt="Email">
   </map>
 
-  <!-- Jotform order form: one shared responsive embed handler for both layouts. -->
-  <script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
+  <script src="https://cdn.jotfor.ms/s/static/latest/static/feedback2.js" type="text/javascript"></script>
   <script>
-    if (typeof window.jotformEmbedHandler === 'function') {
-      window.jotformEmbedHandler("iframe.jotform-order-frame", "https://pci.jotform.com/");
-      window.jotformEmbedHandler("iframe.jotform-appointment-frame", "https://form.jotform.com/");
-    }
+    /* One shared Jotform library and one initialization per lightbox. */
+    var JFL_262545759554167 = new JotformFeedback({
+      formId: '262545759554167', base: 'https://pci.jotform.com/',
+      windowTitle: 'Responsive Product Order Form', backgroundColor: '#FFA500',
+      fontColor: '#FFFFFF', type: 'false', height: 500, width: 700, openOnLoad: false
+    });
+    var JFL_262546480507056 = new JotformFeedback({
+      formId: '262546480507056', base: 'https://form.jotform.com/',
+      windowTitle: 'Book Appointment', backgroundColor: '#FFA500',
+      fontColor: '#FFFFFF', type: 'false', height: 500, width: 700, openOnLoad: false
+    });
   </script>
   <script>
-    /* Premium.Chat creates its iframe asynchronously and may append it to the
-       document body instead of beside its loader snippet. Move only this
-       widget (not the separate availability button) into the portal as soon
-       as it appears, then size its outer provider node to the scaled canvas. */
+    /* Premium.Chat renders against a browser-sized canvas rather than a
+       responsive iframe. Keep its canvas/host relocation architecture and
+       replace only the active provider when a service is selected. */
     (function () {
       'use strict';
-      var widgetId = '1014748';
+      var services = { chat: '1014748', video: '1016625', audio: '1016623' };
       var viewport = document.querySelector('[data-pchat-scale-viewport]');
       var canvas = document.querySelector('[data-pchat-scale-canvas]');
       var host = document.querySelector('[data-pchat-embed-host]');
+      var controls = document.querySelectorAll('[data-pchat-service]');
       if (!viewport || !canvas || !host) return;
 
       var naturalWidth = 1280;
       var naturalHeight = 720;
-      var providerRoot;
+      var activeService = 'chat';
+      var activeWidgetId = services[activeService];
+      var providerRoot = null;
+      var observerQueued = false;
 
-      
+      function fitCanvas() {
+        var width = viewport.clientWidth;
+        var height = viewport.clientHeight;
+        if (!width || !height) return;
+        var scale = Math.min(width / naturalWidth, height / naturalHeight);
+        canvas.style.width = naturalWidth + 'px';
+        canvas.style.height = naturalHeight + 'px';
+        canvas.style.setProperty('--pchat-scale', scale);
+        canvas.style.transform = 'scale(' + scale + ')';
+      }
+
       function isPortalWidget(node) {
         if (!node || node.nodeType !== 1 || node.closest('.premium-chat-corner')) return false;
         var value = (node.id || '') + ' ' + (node.className || '') + ' ' + (node.getAttribute('src') || '');
-        return value.indexOf(widgetId) !== -1 ||
+        return value.indexOf(activeWidgetId) !== -1 ||
           (node.tagName === 'IFRAME' && /premium\.chat/i.test(node.src || ''));
       }
 
       function providerMatch(scope) {
         if (isPortalWidget(scope)) return scope;
         var nodes = scope.querySelectorAll ? scope.querySelectorAll('iframe, [id], [class]') : [];
-        for (var i = 0; i < nodes.length; i++) {
-          if (isPortalWidget(nodes[i])) return nodes[i];
-        }
+        for (var i = 0; i < nodes.length; i++) if (isPortalWidget(nodes[i])) return nodes[i];
         return null;
       }
 
       function outerProviderNode(node) {
         var current = node;
-        while (current.parentElement && current.parentElement !== host && current.parentElement !== document.body) {
-          current = current.parentElement;
-        }
+        while (current.parentElement && current.parentElement !== host && current.parentElement !== document.body) current = current.parentElement;
         return current;
       }
 
       function inspectProvider() {
+        observerQueued = false;
         var match = providerMatch(document.body);
-        if (!match) return;
+        if (!match) { fitCanvas(); return; }
         var root = outerProviderNode(match);
         if (!root || root.closest('.premium-chat-corner')) return;
+        if (providerRoot && providerRoot !== root && providerRoot.parentNode === host) providerRoot.remove();
         if (root.parentNode !== host) host.appendChild(root);
-        if (root === providerRoot) {
-          fitCanvas();
-          return;
-        }
-
         providerRoot = root;
         providerRoot.classList.add('pchat-provider-root');
         var rect = providerRoot.getBoundingClientRect();
-        if (rect.width) naturalWidth = Math.max(naturalWidth, Math.ceil(rect.width));
-        if (rect.height) naturalHeight = Math.max(naturalHeight, Math.ceil(rect.height));
+        if (rect.width) naturalWidth = Math.max(1280, Math.ceil(rect.width));
+        if (rect.height) naturalHeight = Math.max(720, Math.ceil(rect.height));
         providerRoot.style.position = 'absolute';
         providerRoot.style.left = '-383.5px';
         providerRoot.style.top = '0';
@@ -1202,14 +1133,47 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
         fitCanvas();
       }
 
-      new MutationObserver(function () {
-        inspectProvider();
+      function queueInspection() {
+        if (observerQueued) return;
+        observerQueued = true;
+        window.requestAnimationFrame(inspectProvider);
+      }
+
+      function registerWidget(id) {
+        var placeholder = document.createElement('div');
+        placeholder.className = 'pchat-widget-placeholder';
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        /* This is the supplied Premium.Chat queue/loader pattern. The loader
+           is inserted only when the shared queue is first created. */
+        script.text = "(function(d,w,i){w.premiumchat = w.premiumchat || [];var p = w.premiumchat; if(!p.length){(()=>{w.premiumchat_domain = 'https://premium.chat/';var s = d.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = w.premiumchat_domain+'embed/js/widget.js'; var ss = d.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);})();}p.push({'num': p.length, 'wid': i});})(document, window," + id + ");";
+        host.appendChild(placeholder);
+        host.appendChild(script);
+      }
+
+      function selectService(service) {
+        if (!services[service]) return;
+        activeService = service;
+        activeWidgetId = services[service];
+        for (var i = 0; i < controls.length; i++) controls[i].setAttribute('aria-pressed', controls[i].getAttribute('data-pchat-service') === service ? 'true' : 'false');
+        if (service !== 'chat' || !providerRoot) {
+          host.replaceChildren();
+          providerRoot = null;
+          naturalWidth = 1280;
+          naturalHeight = 720;
+          registerWidget(activeWidgetId);
+        }
         fitCanvas();
-      }).observe(document.body, { childList: true, subtree: true });
+        queueInspection();
+      }
+
+      for (var c = 0; c < controls.length; c++) controls[c].addEventListener('click', function () { selectService(this.getAttribute('data-pchat-service')); });
+      new MutationObserver(queueInspection).observe(document.body, { childList: true, subtree: true });
       if (window.ResizeObserver) new ResizeObserver(fitCanvas).observe(viewport);
       window.addEventListener('resize', fitCanvas);
       window.addEventListener('orientationchange', fitCanvas);
-      inspectProvider();
+      window.alchemicalVisionsPremiumChat = { selectService: selectService, fitCanvas: fitCanvas };
+      queueInspection();
       fitCanvas();
     }());
   </script>
@@ -1252,12 +1216,27 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
 
 
 
+      function openLightbox(route) {
+        var selector = route === 'order' ? '.lightbox-262545759554167' : '.lightbox-262546480507056';
+        /* The existing router deliberately renders Home before Jotform opens,
+           keeping the Welcome content in the parchment behind the lightbox. */
+        navigate('home');
+        var trigger = document.querySelector(selector);
+        if (trigger) window.setTimeout(function () { trigger.click(); }, 0);
+      }
+
       var routeControls = document.querySelectorAll('[data-route]');
       for (var c = 0; c < routeControls.length; c++) {
         routeControls[c].addEventListener('click', function (event) {
           event.preventDefault();
-          navigate(this.getAttribute('data-route'));
+          var route = this.getAttribute('data-route');
+          if (route === 'appointment' || route === 'order') openLightbox(route);
+          else navigate(route);
         });
+      }
+      var lightboxTriggers = document.querySelectorAll('[data-lightbox]');
+      for (var l = 0; l < lightboxTriggers.length; l++) {
+        lightboxTriggers[l].addEventListener('click', function () { navigate('home'); });
       }
       function revealPortal(gate) {
         if (gate) gate.hidden = true;
