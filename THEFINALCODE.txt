@@ -104,6 +104,8 @@
     #premium-chat-host > * { transform-origin: top left !important; }
     .pchat-provider-root { display: block; box-sizing: border-box; max-width: none !important; max-height: none !important; }
     iframe.pchat-provider-root, .pchat-provider-root > iframe { display: block; border: 0; }
+    .pchat-loading { position: absolute; z-index: 2; inset: 0; display: grid; place-items: center; padding: 1rem; color: #3c172d; background: #f1dfb4; font: 700 clamp(12px, 1.6vw, 16px)/1.35 Lora, Georgia, serif; letter-spacing: .04em; text-align: center; }
+    .pchat-loading[hidden] { display: none; }
     .portal-gate { position: absolute; z-index: 5; inset: 0; overflow: hidden; background: #08020c; }
     .portal-gate[hidden], .portal-ui[hidden], #reading-portal-widget[hidden], #premium-chat-host[hidden] { display: none; }
     .portal-gate picture { position: absolute; inset: 0; display: block; width: 100%; height: 100%; margin: 0; padding: 0; }
@@ -619,7 +621,10 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
             <button class="pchat-service-button" type="button" data-pchat-service="audio" aria-label="Audio Call" aria-pressed="false"><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789727700/51BBA94C-0337-4B97-B47C-139AC69EA5E0_l9fd0y.png" alt=""></button>
           </div>
         </div>
-        <div id="reading-portal-widget" hidden><div id="premium-chat-host" hidden></div></div>
+        <div id="reading-portal-widget" hidden aria-live="polite">
+          <div id="premium-chat-status" class="pchat-loading" role="status">Loading secure reading portal…</div>
+          <div id="premium-chat-host" hidden></div>
+        </div>
       </div></div>
       <div class="portal-gate" role="button" tabindex="0" aria-label="Enter the Live Reading Portal"><picture><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788991611/IMG_4391_vicok8.png" alt="Enter the Live Reading Portal"></picture></div>
     </section>
@@ -1045,8 +1050,9 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
     });
   </script>
   <script>
-    /* The portal owns the available space; Premium.Chat stays in its native
-       1280 by 720 coordinate system and is scaled only inside that space. */
+    /* Premium.Chat appends its real interface asynchronously.  This controller
+       watches only for the requested Premium.Chat service and moves that real
+       provider node into the visible reading portal once it exists. */
     (function () {
       'use strict';
       var services = { chat: '1014748', video: '1016625', audio: '1016623' };
@@ -1057,27 +1063,34 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
       var portalGate = document.querySelectorAll('.portal-gate');
       var portalWidget = document.getElementById('reading-portal-widget');
       var premiumHost = document.getElementById('premium-chat-host');
-      if (!portal || !portalWidget || !premiumHost) return;
+      var status = document.getElementById('premium-chat-status');
+      if (!portal || !portalWidget || !premiumHost || !status) return;
 
       var portalOpen = false;
       var premiumChatLoaded = false;
       var activeService = 'chat';
       var activeWidgetId = services[activeService];
       var providerRoot = null;
-      var providersByService = {};
-      var loaderRequested = false;
-      var requestedServices = {};
-      var providerObserver = null;
+      var observer = null;
+      var loaderSequence = 0;
 
+      function setStatus(message) {
+        status.textContent = message;
+        status.hidden = false;
+        premiumHost.hidden = true;
+      }
+      function showProvider() {
+        status.hidden = true;
+        premiumHost.hidden = false;
+      }
       function setPressedService() {
         var buttons = document.querySelectorAll('[data-pchat-service]');
         for (var i = 0; i < buttons.length; i++) {
           buttons[i].setAttribute('aria-pressed', buttons[i].getAttribute('data-pchat-service') === activeService ? 'true' : 'false');
         }
       }
-
       function fitPremiumChat() {
-        if (!providerRoot || !premiumHost || premiumHost.hidden) return;
+        if (!providerRoot || premiumHost.hidden) return;
         var boxWidth = portalWidget.clientWidth;
         var boxHeight = portalWidget.clientHeight;
         if (!boxWidth || !boxHeight) return;
@@ -1092,86 +1105,77 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
         providerRoot.style.transformOrigin = 'top left';
         providerRoot.style.transform = 'scale(' + scale + ')';
       }
-
-      function providerForActiveService(scope) {
+      function isIgnored(node) {
+        return !!(node.closest && node.closest('.tmblr-iframe, .tumblr_controls, [data-tumblr-controls], .jotform-lightbox, .jotform-feedback-form, .jf-lightbox, #lightbox, #formLightbox'));
+      }
+      function isPremiumCandidate(node) {
+        if (!node || node.nodeType !== 1 || isIgnored(node) || node.closest('#premium-chat-host') === premiumHost) return false;
+        var idAndClass = (node.id || '') + ' ' + (typeof node.className === 'string' ? node.className : '');
+        var src = node.getAttribute && (node.getAttribute('src') || '');
+        return idAndClass.indexOf(activeWidgetId) !== -1 ||
+          (node.tagName === 'IFRAME' && /(^|\/)\/[^/]*premium\.chat(?:[/:]|$)/i.test(src));
+      }
+      function findProvider(scope) {
         var selector = 'iframe[src*="premium.chat"], [id*="' + activeWidgetId + '"], [class*="' + activeWidgetId + '"]';
         var nodes = scope.querySelectorAll ? scope.querySelectorAll(selector) : [];
-        for (var i = 0; i < nodes.length; i++) {
-          if (!nodes[i].closest('.premium-chat-corner')) return nodes[i];
-        }
+        for (var i = 0; i < nodes.length; i++) if (isPremiumCandidate(nodes[i])) return nodes[i];
         return null;
       }
-
       function providerContainer(node) {
         var current = node;
-        while (current.parentElement && current.parentElement !== document.body && current.parentElement !== premiumHost) {
-          current = current.parentElement;
-        }
+        while (current.parentElement && current.parentElement !== document.body && current.parentElement !== premiumHost) current = current.parentElement;
         return current;
       }
-
       function mountProvider() {
-        var match = providerForActiveService(document);
+        var match = findProvider(document);
         if (!match) return false;
         var root = providerContainer(match);
-        if (!root || root.closest('.premium-chat-corner')) return false;
-        providersByService[activeService] = root;
-        if (providerRoot && providerRoot !== root) providerRoot.hidden = true;
+        if (!root || isIgnored(root)) return false;
+        if (providerRoot && providerRoot !== root && providerRoot.parentNode === premiumHost) providerRoot.remove();
         providerRoot = root;
-        if (providerRoot.parentNode !== premiumHost) premiumHost.appendChild(providerRoot);
-        providerRoot.hidden = false;
-        providerRoot.classList.add('pchat-provider-root');
-        fitPremiumChat();
-        if (providerObserver) {
-          providerObserver.disconnect();
-          providerObserver = null;
-        }
+        if (root.parentNode !== premiumHost) premiumHost.appendChild(root);
+        root.hidden = false;
+        root.classList.add('pchat-provider-root');
+        showProvider();
+        window.requestAnimationFrame(fitPremiumChat);
         return true;
       }
-
-      function observeProviderOnce() {
-        if (providerObserver || mountProvider()) return;
-        providerObserver = new MutationObserver(function () {
-          mountProvider();
+      function watchForProvider() {
+        if (observer) observer.disconnect();
+        observer = new MutationObserver(function () {
+          if (mountProvider() && observer) observer.disconnect();
         });
-        providerObserver.observe(document.body, { childList: true, subtree: true });
+        observer.observe(document.body, { childList: true, subtree: true });
+        mountProvider();
       }
-
-      function ensureLoader() {
-        if (providersByService[activeService]) {
-          if (providerRoot && providerRoot !== providersByService[activeService]) providerRoot.hidden = true;
-          providerRoot = providersByService[activeService];
-          if (providerRoot.parentNode !== premiumHost) premiumHost.appendChild(providerRoot);
-          providerRoot.hidden = false;
-          fitPremiumChat();
-          return;
-        }
-        window.premiumchat = window.premiumchat || [];
-        if (!loaderRequested) {
-          loaderRequested = true;
-          window.premiumchat_domain = 'https://premium.chat/';
-          var script = document.createElement('script');
-          script.async = true;
-          script.src = 'https://premium.chat/embed/js/widget.js';
-          script.dataset.premiumChatLoader = 'true';
-          document.head.appendChild(script);
-        }
-        if (!requestedServices[activeService]) {
-          requestedServices[activeService] = true;
-          window.premiumchat.push({ num: window.premiumchat.length, wid: activeWidgetId });
-        }
-        observeProviderOnce();
+      function requestProvider() {
+        var sequence = ++loaderSequence;
+        providerRoot = null;
+        premiumHost.replaceChildren();
+        setStatus('Loading secure ' + activeService + ' reading…');
+        window.premiumchat = [];
+        window.premiumchat_domain = 'https://premium.chat/';
+        window.premiumchat.push({ num: 0, wid: activeWidgetId });
+        watchForProvider();
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://premium.chat/embed/js/widget.js';
+        script.dataset.premiumChatLoader = 'true';
+        script.dataset.premiumChatService = activeWidgetId;
+        script.onload = function () {
+          if (sequence === loaderSequence) watchForProvider();
+        };
+        script.onerror = function () {
+          if (sequence === loaderSequence) setStatus('The secure reading portal is still loading. Please wait a moment.');
+        };
+        document.head.appendChild(script);
       }
-
       function loadReadingPortal() {
         if (!portalOpen) openPortal();
         premiumChatLoaded = true;
         portalWidget.hidden = false;
-        premiumHost.hidden = false;
-        ensureLoader();
-        fitPremiumChat();
+        requestProvider();
       }
-
       function selectService(service) {
         if (!services[service]) return;
         activeService = service;
@@ -1179,52 +1183,40 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
         setPressedService();
         loadReadingPortal();
       }
-
       function openPortal() {
         portalOpen = true;
         for (var i = 0; i < portalGate.length; i++) portalGate[i].hidden = true;
         if (portalUI) portalUI.hidden = false;
-        window.requestAnimationFrame(fitPremiumChat);
+        loadReadingPortal();
       }
-
+      function closePortal() {
+        portalOpen = false;
+        premiumChatLoaded = false;
+        ++loaderSequence;
+        if (observer) observer.disconnect();
+        providerRoot = null;
+        premiumHost.replaceChildren();
+        premiumHost.hidden = true;
+        portalWidget.hidden = true;
+        if (portalUI) portalUI.hidden = true;
+        for (var i = 0; i < portalGate.length; i++) portalGate[i].hidden = false;
+      }
       document.addEventListener('click', function (event) {
         var gate = event.target.closest('.portal-gate');
-        if (gate) {
-          event.preventDefault();
-          openPortal();
-          return;
-        }
+        if (gate) { event.preventDefault(); openPortal(); return; }
         var loadButton = event.target.closest('[data-action="load-reading-portal"]');
-        if (loadButton) {
-          event.preventDefault();
-          event.stopPropagation();
-          loadReadingPortal();
-          return;
-        }
+        if (loadButton) { event.preventDefault(); event.stopPropagation(); closePortal(); return; }
         var serviceButton = event.target.closest('[data-pchat-service]');
-        if (serviceButton) {
-          event.preventDefault();
-          event.stopPropagation();
-          selectService(serviceButton.getAttribute('data-pchat-service'));
-        }
+        if (serviceButton) { event.preventDefault(); event.stopPropagation(); selectService(serviceButton.getAttribute('data-pchat-service')); }
       });
       document.addEventListener('keydown', function (event) {
         var gate = event.target.closest && event.target.closest('.portal-gate');
-        if (gate && (event.key === 'Enter' || event.key === ' ')) {
-          event.preventDefault();
-          openPortal();
-        }
+        if (gate && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); openPortal(); }
       });
-      if (window.ResizeObserver) new ResizeObserver(fitPremiumChat).observe(premiumHost);
+      if (window.ResizeObserver) new ResizeObserver(fitPremiumChat).observe(portalWidget);
       window.addEventListener('resize', fitPremiumChat);
       window.addEventListener('orientationchange', fitPremiumChat);
-      window.alchemicalVisionsPremiumChat = {
-        openPortal: openPortal,
-        loadReadingPortal: loadReadingPortal,
-        selectService: selectService,
-        fitPremiumChat: fitPremiumChat,
-        getState: function () { return { portalOpen: portalOpen, premiumChatLoaded: premiumChatLoaded, activeService: activeService, activeWidgetId: activeWidgetId, providerRoot: providerRoot }; }
-      };
+      window.alchemicalVisionsPremiumChat = { openPortal: openPortal, closePortal: closePortal, loadReadingPortal: loadReadingPortal, selectService: selectService, fitPremiumChat: fitPremiumChat, getState: function () { return { portalOpen: portalOpen, premiumChatLoaded: premiumChatLoaded, activeService: activeService, activeWidgetId: activeWidgetId, providerRoot: providerRoot }; } };
       setPressedService();
     }());
   </script>
