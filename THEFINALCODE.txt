@@ -106,9 +106,39 @@
     .pchat-service-button:focus-visible { outline: 2px solid #3c172d; outline-offset: 2px; }
     /* Premium.Chat renders for a browser-sized canvas. This viewport clips the
        large provider while the canvas preserves its expected coordinate space. */
-    .pchat-scale-viewport { position: relative; flex: 1 1 auto; width: 100%; min-width: 0; min-height: 0; overflow: hidden; isolation: isolate; contain: layout paint size; }
-    .pchat-scale-canvas { --pchat-scale: 1; position: absolute; top: 0; left: 0; width: 1280px; height: 720px; min-width: 1280px; min-height: 720px; overflow: visible; transform: scale(.39); transform-origin: top left; }
-    .pchat-embed-host { position: absolute; inset: 0; width: 100%; height: 100%; min-width: 0; min-height: 0; overflow: visible; }
+    .pchat-scale-viewport {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      isolation: isolate;
+      contain: layout paint size;
+    }
+    .live-reading-portal > .pchat-scale-viewport { flex: 1 1 auto; }
+    .pchat-scale-canvas {
+      --pchat-scale: 1;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1280px;
+      height: 720px;
+      min-width: 1280px;
+      min-height: 720px;
+      overflow: visible;
+      transform: scale(0.39);
+      transform-origin: top left;
+    }
+    .pchat-embed-host {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      overflow: visible;
+    }
     .pchat-provider-root { display: block; box-sizing: border-box; }
     iframe.pchat-provider-root, .pchat-provider-root > iframe { display: block; border: 0; }
     .portal-gate { position: absolute; z-index: 4; inset: 0; overflow: hidden; background: #08020c; cursor: pointer; }
@@ -122,8 +152,19 @@
       html, body { cursor: url("https://res.cloudinary.com/dgpfj9fox/image/upload/v1789727700/0853FA8B-5EC0-4072-83C3-FFBE686A143B_xfby2q.png") 4 4, auto; }
       a[href], area[href], button, [role="button"], .premium-chat-corner, .premium-chat-corner *, .pchat-provider-root iframe { cursor: url("https://res.cloudinary.com/dgpfj9fox/image/upload/v1789727700/4C9CD2E6-01A3-484B-94AC-96286B04395C_uujpqu.png") 4 4, pointer; }
     }
+    /* Jotform lightboxes must remain above the floating sound control. */
+    #lightbox, #formLightbox, [id^="lightbox_"], .jotform-lightbox, .jotform-feedback-form, .jf-lightbox {
+      z-index: 2147483645 !important;
+    }
+    #lightbox .close, #lightbox .close-button, #lightbox .lightbox-close,
+    #formLightbox .close, #formLightbox .close-button, #formLightbox .lightbox-close,
+    [id^="lightbox_"] .close, [id^="lightbox_"] .close-button, [id^="lightbox_"] .lightbox-close,
+    .jotform-lightbox .close, .jotform-lightbox .close-button, .jotform-feedback-form .close, .jotform-feedback-form .close-button,
+    .jf-lightbox .close, .jf-lightbox .close-button {
+      pointer-events: auto !important;
+    }
     .ambient-sound-toggle {
-      position: fixed; top: 14px; right: 14px; z-index: 2147483646;
+      position: fixed; top: 14px; right: 14px; z-index: 900;
       width: 36px; height: 36px; min-width: 36px; min-height: 36px;
       display: grid; place-items: center; margin: 0; padding: 0;
       border: 1px solid rgba(241, 223, 180, .82); border-radius: 50%;
@@ -134,6 +175,34 @@
     }
     .ambient-sound-toggle:hover, .ambient-sound-toggle:focus-visible {
       border-color: #fff; outline: 2px solid rgba(255, 255, 255, .8); outline-offset: 2px;
+    }
+    .touch-cursor-effect {
+      position: fixed;
+      z-index: 2147483001;
+      display: block;
+      width: clamp(30px, 9vw, 42px);
+      height: clamp(30px, 9vw, 42px);
+      pointer-events: none;
+      visibility: visible;
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(.72);
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, .9)) drop-shadow(0 0 10px rgba(157, 92, 255, .8));
+    }
+    .touch-cursor-effect::before {
+      position: absolute;
+      inset: 22%;
+      display: block;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, .9) 0 12%, rgba(196, 145, 255, .55) 35%, transparent 72%);
+      content: '';
+    }
+    .touch-cursor-effect.is-fading {
+      animation: touch-cursor-fade .65s ease-out forwards;
+    }
+    .touch-cursor-effect img { position: relative; display: block; width: 100%; height: 100%; object-fit: contain; }
+    @keyframes touch-cursor-fade {
+      18% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.25); }
     }
     .smoke-layer { position: absolute; inset: 0; z-index: 5; display: block; overflow: hidden; visibility: visible; pointer-events: none; }
     .smoke { position: absolute; display: block; visibility: visible; width: clamp(32px, 4.5%, 72px); height: auto; opacity: .48; transform-origin: 50% 100%; will-change: transform, opacity; animation-name: smoke-curl; animation-duration: var(--smoke-duration); animation-timing-function: ease-in-out; animation-delay: var(--smoke-delay); animation-iteration-count: infinite; animation-fill-mode: both; }
@@ -1239,18 +1308,25 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
         lightboxTriggers[l].addEventListener('click', function () { navigate('home'); });
       }
       function revealPortal(gate) {
-        if (gate) gate.hidden = true;
+        if (!gate || gate.hidden) return;
+        /* Do not expose the provider until the activating gesture has ended.
+           The Premium.Chat loader watches document clicks; hiding synchronously
+           made the same Enter Portal click look like a provider click and
+           allowed its external-page handler to run. */
+        window.setTimeout(function () { gate.hidden = true; }, 0);
       }
-      document.addEventListener('click', function (event) {
-        revealPortal(event.target.closest('.portal-gate'));
-      });
-      document.addEventListener('keydown', function (event) {
-        var gate = event.target.closest('.portal-gate');
-        if (gate && (event.key === 'Enter' || event.key === ' ')) {
-          event.preventDefault();
-          revealPortal(gate);
-        }
-      });
+      function enterPortal(event) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        revealPortal(event.currentTarget);
+      }
+      var portalGates = document.querySelectorAll('.portal-gate');
+      for (var pg = 0; pg < portalGates.length; pg++) {
+        portalGates[pg].addEventListener('click', enterPortal);
+        portalGates[pg].addEventListener('keydown', function (event) {
+          if (event.key === 'Enter' || event.key === ' ') enterPortal(event);
+        });
+      }
 
       var readingPortal = document.querySelector('[data-reading-portal]');
       var portalSlots = document.querySelectorAll('[data-reading-portal-slot]');
@@ -1271,6 +1347,45 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
       var initialRoute = validRoute(window.location.hash.slice(1));
       renderRoute(initialRoute);
 
+    }());
+  </script>
+  <script>
+    /* Touchscreens do not have a persistent mouse cursor. Show one brief,
+       non-interactive instance of the site's existing magical cursor artwork
+       at the start of each touch without changing the touch gesture itself. */
+    (function () {
+      'use strict';
+      var cursorArtwork = 'https://res.cloudinary.com/dgpfj9fox/image/upload/v1789727700/0853FA8B-5EC0-4072-83C3-FFBE686A143B_xfby2q.png';
+      var cursorPreload = new Image();
+      cursorPreload.src = cursorArtwork;
+
+      function showTouchEffect(x, y) {
+        var effect = document.createElement('span');
+        var image = document.createElement('img');
+        effect.className = 'touch-cursor-effect';
+        effect.style.left = x + 'px';
+        effect.style.top = y + 'px';
+        image.src = cursorArtwork;
+        image.alt = '';
+        image.setAttribute('aria-hidden', 'true');
+        effect.appendChild(image);
+        document.body.appendChild(effect);
+        window.requestAnimationFrame(function () { effect.classList.add('is-fading'); });
+        /* The timeout is a fallback for reduced-motion or preview environments
+           that suppress CSS animation events. */
+        window.setTimeout(function () { effect.remove(); }, 750);
+      }
+
+      if (window.PointerEvent) {
+        document.addEventListener('pointerdown', function (event) {
+          if (event.pointerType === 'touch') showTouchEffect(event.clientX, event.clientY);
+        }, { passive: true });
+      } else {
+        document.addEventListener('touchstart', function (event) {
+          var touch = event.changedTouches && event.changedTouches[0];
+          if (touch) showTouchEffect(touch.clientX, touch.clientY);
+        }, { passive: true });
+      }
     }());
   </script>
   <script>
