@@ -89,6 +89,9 @@
     .content-panel:has(.portal-view:not([hidden])) { overflow-y: clip; scrollbar-gutter: auto; }
     .portal-header { position: relative; z-index: 20; height: 21%; max-height: none; margin-bottom: 1%; }
     .reading-portal-slot { position: absolute; z-index: 2; top: 21%; left: 0; right: 0; bottom: 0; min-width: 0; min-height: 0; overflow: hidden; }
+    .portal-cap { position: absolute; z-index: 10; inset: 0; display: block; width: 100%; height: 100%; border: 0; padding: 0; background: transparent; cursor: pointer; }
+    .portal-cap img { display: block; width: 100%; height: 100%; object-fit: fill; }
+    .portal-cap[hidden] { display: none; }
     .live-reading-portal { position: absolute; inset: 0; display: flex; flex-direction: column; width: 100%; height: 100%; overflow: hidden; background: #f1dfb4; }
     .pchat-service-controls { position: relative; z-index: 3; display: flex; flex: 0 0 auto; align-items: center; justify-content: center; gap: clamp(4px, 1vw, 12px); padding: 2px 3px 5px; line-height: normal; }
     .pchat-service-button { width: min(31%, 145px); min-width: 0; padding: 0; border: 0; background: transparent; cursor: pointer; -webkit-tap-highlight-color: transparent; }
@@ -112,7 +115,7 @@
       pointer-events: auto !important;
     }
     .ambient-sound-toggle {
-      position: fixed; top: 14px; right: 14px; z-index: 900;
+      position: fixed; top: 14px; right: 14px; z-index: 1;
       width: 36px; height: 36px; min-width: 36px; min-height: 36px;
       display: grid; place-items: center; margin: 0; padding: 0;
       border: 1px solid rgba(241, 223, 180, .82); border-radius: 50%;
@@ -227,7 +230,7 @@
   <button class="ambient-sound-toggle" type="button" data-sound-toggle aria-pressed="true" aria-label="Turn ambient sound off">🔊</button>
   <main aria-label="Alchemical Visions home page">
     <section class="layout layout-desktop" aria-label="Desktop layout">
-      <img class="art" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788699767/C0F3F187-BB6E-4868-893F-01FD976D4668_au5t8a.png" width="1536" height="1024" alt="Alchemical Visions psychic readings and astrology services" usemap="#desktop-map">
+      <img class="art" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789183156/desktop_navigation_halos_heart_point_raised_10px_overlay_ooesch.png" width="1536" height="1024" alt="Alchemical Visions psychic readings and astrology services" usemap="#desktop-map">
       <div class="smoke-layer" aria-hidden="true"><img class="smoke d-smoke-1" data-candle="1" data-smoke-trail="1" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789052151/0D211922-216B-4C0E-9647-5CE387390F36_rt7rka.png" alt="" style="--smoke-duration:9.5s;--smoke-delay:0s"><img class="smoke d-smoke-2" data-candle="2" data-smoke-trail="2" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789052151/0BE53556-4C05-4FAA-B7B1-E4B6BD1B2AFA_qs4rr7.png" alt="" style="--smoke-duration:11s;--smoke-delay:-3s"><img class="smoke d-smoke-3" data-candle="3" data-smoke-trail="3" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789052151/BC267010-82B4-45E8-B0EA-C894C574938C_gjaioe.png" alt="" style="--smoke-duration:12.5s;--smoke-delay:-6s"><img class="smoke d-smoke-4" data-candle="4" data-smoke-trail="4" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789052151/162D0957-6757-455F-927D-58C1A4850B15_nhgj7s.png" alt="" style="--smoke-duration:10.5s;--smoke-delay:-8s"><img class="smoke d-smoke-5" data-candle="5" data-smoke-trail="5" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789052151/D0ABA1F3-524C-4E7E-8481-77E57FC88286_cyg50f.png" alt="" style="--smoke-duration:14s;--smoke-delay:-11s"></div>
       <section class="content-panel desktop-panel" aria-live="polite"><div class="sections-host" data-sections-host>
     <!-- HOME CONTENT -->
@@ -587,12 +590,12 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
     <!-- BOOK APPOINTMENT CONTENT -->
     <section class="content-section appointment-section" data-section="appointment" hidden>
       <h1 class="sr-only">Book Appointment</h1>
-      <button class="btn lightbox-262546480507056 lightbox-trigger" type="button" data-lightbox="appointment">Book Appointment</button>
+      <a class="btn lightbox-262546480507056 lightbox-trigger" style="margin-top: 16px; text-transform: uppercase; font-size: 14px; text-decoration: none; cursor: pointer; display: inline-block; padding: 10px; font-family: inherit; text-shadow: none; user-select: none; transition: all,.1s,ease-in; background-color: #FFA500; border: 1px solid #FFA500; color: #FFFFFF;" data-lightbox="appointment">Book Appointment</a>
     </section>
     <!-- PLACE ORDER CONTENT -->
     <section class="content-section order-section" data-section="order" hidden>
       <h1 class="sr-only">Place Order: Astrology Reports</h1>
-      <button class="btn lightbox-262545759554167 lightbox-trigger" type="button" data-lightbox="order">Place Order: Astrology Reports</button>
+      <a class="btn lightbox-262545759554167 lightbox-trigger" style="margin-top: 16px; text-transform: uppercase; font-size: 14px; text-decoration: none; cursor: pointer; display: inline-block; padding: 10px; font-family: inherit; text-shadow: none; user-select: none; transition: all,.1s,ease-in; background-color: #FFA500; border: 1px solid #FFA500; color: #FFFFFF;" data-lightbox="order">Responsive Product Order Form</a>
     </section>
     <!-- CONTACT CONTENT -->
     <section class="content-section" data-section="contact" hidden><h1>Contact Me</h1><p><a href="mailto:Contact@AlchemicalVisions.com">Contact@AlchemicalVisions.com</a></p></section>
@@ -611,7 +614,7 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
             <div id="premium-chat-host" class="pchat-embed-host" data-pchat-embed-host></div>
           </div>
         </div>
-      </div></div>
+      </div><button class="portal-cap" type="button" data-portal-cap aria-label="Enter the live reading portal"><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788991611/IMG_4391_vicok8.png" alt="Enter the live reading portal"></button></div>
     </section>
       </div></section>
       <nav aria-label="Primary navigation">
@@ -984,12 +987,12 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
     <!-- BOOK APPOINTMENT CONTENT -->
     <section class="content-section appointment-section" data-section="appointment" hidden>
       <h1 class="sr-only">Book Appointment</h1>
-      <button class="btn lightbox-262546480507056 lightbox-trigger" type="button" data-lightbox="appointment">Book Appointment</button>
+      <a class="btn lightbox-262546480507056 lightbox-trigger" style="margin-top: 16px; text-transform: uppercase; font-size: 14px; text-decoration: none; cursor: pointer; display: inline-block; padding: 10px; font-family: inherit; text-shadow: none; user-select: none; transition: all,.1s,ease-in; background-color: #FFA500; border: 1px solid #FFA500; color: #FFFFFF;" data-lightbox="appointment">Book Appointment</a>
     </section>
     <!-- PLACE ORDER CONTENT -->
     <section class="content-section order-section" data-section="order" hidden>
       <h1 class="sr-only">Place Order: Astrology Reports</h1>
-      <button class="btn lightbox-262545759554167 lightbox-trigger" type="button" data-lightbox="order">Place Order: Astrology Reports</button>
+      <a class="btn lightbox-262545759554167 lightbox-trigger" style="margin-top: 16px; text-transform: uppercase; font-size: 14px; text-decoration: none; cursor: pointer; display: inline-block; padding: 10px; font-family: inherit; text-shadow: none; user-select: none; transition: all,.1s,ease-in; background-color: #FFA500; border: 1px solid #FFA500; color: #FFFFFF;" data-lightbox="order">Responsive Product Order Form</a>
     </section>
     <!-- CONTACT CONTENT -->
     <section class="content-section" data-section="contact" hidden><h1>Contact Me</h1><p><a href="mailto:Contact@AlchemicalVisions.com">Contact@AlchemicalVisions.com</a></p></section>
@@ -997,7 +1000,7 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
     <section class="content-section portal-view" data-section="portal" hidden>
       <h1 class="sr-only">Live Reading Portal</h1>
       <img class="panel-header portal-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949649/C2604EB8-27DF-4E1C-953B-87B9235FAC6F_nh2zt0.png" alt="Premium.chat">
-      <div class="reading-portal-slot" data-reading-portal-slot></div>
+      <div class="reading-portal-slot" data-reading-portal-slot><button class="portal-cap" type="button" data-portal-cap aria-label="Enter the live reading portal"><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788991611/IMG_4392_zmwfyr.png" alt="Enter the live reading portal"></button></div>
     </section>
       </div></section>
       <nav aria-label="Primary navigation">
@@ -1023,16 +1026,18 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
   <script>
     /* One shared Jotform library and one initialization per lightbox. */
     var JFL_262545759554167 = new JotformFeedback({
-      formId: '262545759554167', base: 'https://pci.jotform.com/',
+      formId: '262545759554167', base: 'https://form.jotform.com/',
       windowTitle: 'Responsive Product Order Form', backgroundColor: '#FFA500',
-      fontColor: '#FFFFFF', type: 'false', height: 500, width: 700, openOnLoad: false
+      fontColor: '#FFFFFF', type: '0', height: 500, width: 700, openOnLoad: false
     });
     var JFL_262546480507056 = new JotformFeedback({
       formId: '262546480507056', base: 'https://form.jotform.com/',
       windowTitle: 'Book Appointment', backgroundColor: '#FFA500',
-      fontColor: '#FFFFFF', type: 'false', height: 500, width: 700, openOnLoad: false
+      fontColor: '#FFFFFF', type: '0', height: 500, width: 700, openOnLoad: false
     });
   </script>
+  <script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
+  <script>window.jotformEmbedHandler("iframe[id='262545759554167']", "https://form.jotform.com/"); window.jotformEmbedHandler("iframe[id='262546480507056']", "https://form.jotform.com/");</script>
   <script type="text/javascript">
 (function(d,w,i){
   w.premiumchat=w.premiumchat||[];
@@ -1206,6 +1211,7 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
         for (var p = 0; p < hosts.length; p++) hosts[p].parentNode.scrollTop = 0;
         if (name === 'portal' && typeof placeReadingPortal === 'function') {
           placeReadingPortal();
+          if (typeof showPortalCap === 'function') showPortalCap();
         }
         document.title = (name === 'home' ? 'Alchemical Visions' : name.replace(/(^|-)\w/g, function (m) { return m.toUpperCase(); }) + ' | Alchemical Visions');
       }
@@ -1251,9 +1257,21 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
         }
         return portalSlots[0];
       }
+      function activePortalCap() {
+        var slot = activePortalSlot();
+        return slot ? slot.querySelector('[data-portal-cap]') : null;
+      }
       function placeReadingPortal() {
         var slot = activePortalSlot();
-        if (readingPortal && slot && readingPortal.parentNode !== slot) slot.appendChild(readingPortal);
+        if (readingPortal && slot && readingPortal.parentNode !== slot) slot.insertBefore(readingPortal, slot.firstChild);
+      }
+      function showPortalCap() {
+        var cap = activePortalCap();
+        if (cap) cap.hidden = false;
+      }
+      var portalCaps = document.querySelectorAll('[data-portal-cap]');
+      for (var pc = 0; pc < portalCaps.length; pc++) {
+        portalCaps[pc].addEventListener('click', function () { this.hidden = true; });
       }
       var layoutQuery = window.matchMedia('(max-width: 767px), (orientation: portrait)');
       if (layoutQuery.addEventListener) layoutQuery.addEventListener('change', placeReadingPortal);
