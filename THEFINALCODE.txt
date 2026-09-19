@@ -1401,5 +1401,8 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
       else stop();
     }());
   </script>
+  <!-- BEGIN PREMIUM.CHAT BUTTON CODE {literal} -->
+  <script type="text/javascript" src="https://premium.chat/swbtn/vNy5kBqV4B.js"></script>
+  <!-- {/literal} END PREMIUM.CHAT CODE -->
 </body>
 </html>
