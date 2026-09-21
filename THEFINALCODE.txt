@@ -89,8 +89,12 @@
     .content-panel:has(.portal-view:not([hidden])) { overflow-y: clip; scrollbar-gutter: auto; }
     .portal-header { position: relative; z-index: 20; height: 21%; max-height: none; margin-bottom: 1%; }
     .reading-portal-slot { position: absolute; z-index: 2; top: 21%; left: 0; right: 0; bottom: 0; min-width: 0; min-height: 0; overflow: hidden; }
-    .portal-cap { position: absolute; z-index: 10; inset: 0; display: block; width: 100%; height: 100%; object-fit: fill; }
+    /* The cover is a panel-level overlay, so it also covers the portal heading. */
+    .portal-cap { position: absolute; z-index: 30; inset: 0; display: block; width: 100%; height: 100%; object-fit: fill; }
     .portal-cap[hidden] { display: none; }
+    /* Do not allow the embedded provider (or its iframe) to receive the cap's
+       activation gesture. It becomes interactive only after the cap is gone. */
+    .portal-view:has(.portal-cap:not([hidden])) .reading-portal-slot { pointer-events: none; }
     .live-reading-portal { position: absolute; inset: 0; display: flex; flex-direction: column; width: 100%; height: 100%; overflow: hidden; background: #f1dfb4; }
     .pchat-service-controls { position: relative; z-index: 3; display: flex; flex: 0 0 auto; align-items: center; justify-content: center; gap: clamp(4px, 1vw, 12px); padding: 2px 3px 5px; line-height: normal; }
     .pchat-service-button { width: min(31%, 145px); min-width: 0; padding: 0; border: 0; background: transparent; cursor: pointer; -webkit-tap-highlight-color: transparent; }
@@ -613,7 +617,8 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
             <div id="premium-chat-host" class="pchat-embed-host" data-pchat-embed-host></div>
           </div>
         </div>
-      </div><img id="desktop-portal-cap" class="portal-cap" data-portal-cap src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788991611/IMG_4391_vicok8.png" alt="Live reading portal cover" usemap="#desktop-portal-cap-map"></div>
+      </div>
+      <img id="desktop-portal-cap" class="portal-cap" data-portal-cap src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788991611/IMG_4391_vicok8.png" alt="Live reading portal cover" usemap="#desktop-portal-cap-map">
     </section>
       </div></section>
       <nav aria-label="Primary navigation">
@@ -999,7 +1004,8 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
     <section class="content-section portal-view" data-section="portal" hidden>
       <h1 class="sr-only">Live Reading Portal</h1>
       <img class="panel-header portal-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949649/C2604EB8-27DF-4E1C-953B-87B9235FAC6F_nh2zt0.png" alt="Premium.chat">
-      <div class="reading-portal-slot" data-reading-portal-slot><img id="mobile-portal-cap" class="portal-cap" data-portal-cap src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788991611/IMG_4392_zmwfyr.png" alt="Live reading portal cover" usemap="#mobile-portal-cap-map"></div>
+      <div class="reading-portal-slot" data-reading-portal-slot></div>
+      <img id="mobile-portal-cap" class="portal-cap" data-portal-cap src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788991611/IMG_4392_zmwfyr.png" alt="Live reading portal cover" usemap="#mobile-portal-cap-map">
     </section>
       </div></section>
       <nav aria-label="Primary navigation">
@@ -1014,10 +1020,10 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
 
 
 
-  <!-- The portal-cap artwork supplies its own Enter Portal button. These maps make
-       only that printed button interactive; no additional button is layered over it. -->
-  <map name="desktop-portal-cap-map"><area shape="rect" data-portal-cap-trigger="desktop-portal-cap" href="#portal" alt="Enter the live reading portal"></map>
-  <map name="mobile-portal-cap-map"><area shape="rect" data-portal-cap-trigger="mobile-portal-cap" href="#portal" alt="Enter the live reading portal"></map>
+  <!-- These polygons follow the printed Enter Portal button outlines in the
+       source artwork. Image maps scale the traced path with the cap image. -->
+  <map name="desktop-portal-cap-map"><area shape="poly" coords="124,516,432,516,447,524,456,540,456,669,447,685,432,693,124,693,109,685,100,669,100,540,109,524" data-portal-cap-trigger="desktop-portal-cap" href="#portal" alt="Enter the live reading portal"></map>
+  <map name="mobile-portal-cap-map"><area shape="poly" coords="128,465,451,465,466,473,475,489,475,601,466,617,451,625,128,625,113,617,104,601,104,489,113,473" data-portal-cap-trigger="mobile-portal-cap" href="#portal" alt="Enter the live reading portal"></map>
 
   <map name="mobile-map">
     <area shape="rect" coords="134,248,230,407" data-route="home" href="#home" alt="Home"><area shape="rect" coords="226,248,322,407" data-route="news" href="#news" alt="News"><area shape="rect" coords="324,248,420,407" data-route="about" href="#about" alt="About"><area shape="rect" coords="421,248,518,407" data-route="services" href="#services" alt="Services"><area shape="rect" coords="500,248,609,407" data-route="astrology" href="#astrology" alt="Astrology Reports"><area shape="rect" coords="598,248,704,407" data-route="schedule" href="#schedule" alt="Schedule"><area shape="rect" coords="695,248,804,407" data-route="appointment" href="#appointment" alt="Book Appointment"><area shape="rect" coords="792,248,901,407" data-route="order" href="#order" alt="Place Order"><area shape="rect" coords="855,850,1017,1034" href="mailto:Contact@AlchemicalVisions.com" target="_blank" alt="Contact Me"><area shape="rect" coords="18,928,211,1020" data-route="portal" href="#portal" alt="Live Reading Portal"><area shape="rect" coords="798,1458,833,1505" href="https://www.facebook.com/alchemicalvisions/" alt="Facebook"><area shape="rect" coords="837,1458,873,1505" href="https://www.instagram.com/alchemicalvisions/" alt="Instagram"><area shape="rect" coords="876,1458,910,1505" href="https://www.x.com/alchemicalvisions" alt="X / Twitter"><area shape="rect" coords="914,1458,950,1505" href="mailto:Contact@AlchemicalVisions.com" alt="Email">
@@ -1262,8 +1268,11 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
         return portalSlots[0];
       }
       function activePortalCap() {
-        var slot = activePortalSlot();
-        return slot ? slot.querySelector('[data-portal-cap]') : null;
+        var caps = document.querySelectorAll('[data-portal-cap]');
+        for (var i = 0; i < caps.length; i++) {
+          if (caps[i].closest('.layout').offsetParent !== null) return caps[i];
+        }
+        return caps[0];
       }
       function placeReadingPortal() {
         var slot = activePortalSlot();
@@ -1273,25 +1282,11 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
         var cap = activePortalCap();
         if (cap) cap.hidden = false;
       }
-      function mapPortalCapButton(cap) {
-        var map = document.querySelector(cap.useMap);
-        var area = map && map.querySelector('[data-portal-cap-trigger]');
-        if (!area || !cap.naturalWidth || !cap.naturalHeight) return;
-        /* The Enter Portal artwork occupies the centered lower control band. */
-        area.coords = [
-          Math.round(cap.naturalWidth * 0.18), Math.round(cap.naturalHeight * 0.64),
-          Math.round(cap.naturalWidth * 0.82), Math.round(cap.naturalHeight * 0.86)
-        ].join(',');
-      }
-      var portalCaps = document.querySelectorAll('[data-portal-cap]');
-      for (var pc = 0; pc < portalCaps.length; pc++) {
-        mapPortalCapButton(portalCaps[pc]);
-        portalCaps[pc].addEventListener('load', function () { mapPortalCapButton(this); });
-      }
       var portalCapTriggers = document.querySelectorAll('[data-portal-cap-trigger]');
       for (var pt = 0; pt < portalCapTriggers.length; pt++) {
         portalCapTriggers[pt].addEventListener('click', function (event) {
           event.preventDefault();
+          event.stopImmediatePropagation();
           var cap = document.getElementById(this.getAttribute('data-portal-cap-trigger'));
           if (cap) cap.hidden = true;
         });
