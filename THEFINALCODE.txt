@@ -1190,10 +1190,8 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
         name = validRoute(name);
         var sections = document.querySelectorAll('[data-section]');
         if (!sections.length) return;
-        if (name !== 'portal') {
-          var portalGates = document.querySelectorAll('.portal-gate');
-          for (var g = 0; g < portalGates.length; g++) portalGates[g].hidden = false;
-        }
+        var portalGates = document.querySelectorAll('.portal-gate');
+        for (var g = 0; g < portalGates.length; g++) portalGates[g].hidden = false;
         for (var i = 0; i < sections.length; i++) {
           var active = sections[i].getAttribute('data-section') === name;
           sections[i].hidden = !active;

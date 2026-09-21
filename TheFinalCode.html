@@ -41,34 +41,12 @@
       border: 0; border-radius: 44% 44% 35% 35%;
       color: transparent; font-size: 0; line-height: normal;
       -webkit-tap-highlight-color: transparent;
-      transition: filter .15s, transform .08s;
+      transition: transform .08s;
     }
-    .hotspot::after { content: ""; position: absolute; pointer-events: none; opacity: 0; transition: opacity .15s; }
-    .potion::before, .potion::after { content: ""; position: absolute; z-index: 1; pointer-events: none; opacity: 0; transition: opacity .15s; }
-    /* Two transparent pieces join into one heart-perimeter line: rounded lobes
-       above and the tapered V below. No fill is painted over the bottle art. */
-    .potion::before { left: 12%; top: 19%; width: 76%; height: 35%; border: 1.5px solid var(--halo); border-bottom: 0; border-radius: 52% 52% 18% 18% / 70% 70% 20% 20%; box-shadow: 0 0 3px var(--halo); }
-    .potion::after { left: 22%; top: 39%; width: 56%; aspect-ratio: 1; border-right: 1.5px solid var(--halo); border-bottom: 1.5px solid var(--halo); transform: rotate(45deg); border-radius: 0 0 18% 0; filter: drop-shadow(2px 2px 3px var(--halo)); }
-    .d-home, .m-home { --halo: #ff2424; }
-    .d-news, .m-news { --halo: #7424ff; }
-    .d-about, .m-about { --halo: #ff9a24; }
-    .d-services, .m-services { --halo: #ff2fa3; }
-    .d-reports, .m-reports { --halo: #ffc52e; }
-    .d-schedule, .m-schedule { --halo: #f4f7fa; }
-    .d-book, .m-book { --halo: #246bff; }
-    .d-order, .m-order { --halo: #24e65c; }
-    .hotspot:hover, .hotspot:focus-visible { outline: 0; }
-    .hotspot:hover::after, .hotspot:focus-visible::after, .hotspot:active::after,
-    .potion:hover::before, .potion:focus-visible::before, .potion:active::before { opacity: 1; }
-    .hotspot:active {
-      transform: scale(.98);
-    }
+    .hotspot:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+    .hotspot:active { transform: scale(.98); }
     .circle { border-radius: 50%; }
-    .circle::after { inset: 5%; border: 1.5px solid #fff; border-radius: 50%; background: transparent; box-shadow: 0 0 3px #fff; }
     .d-portal, .m-portal { border-radius: 42%; }
-    .d-portal::after, .m-portal::after { inset: 7% 2%; border: 1.5px solid #fff; border-radius: 45%; background: transparent; box-shadow: 0 0 3px #fff; }
-    .d-contact:hover, .d-contact:focus-visible, .m-contact:hover, .m-contact:focus-visible,
-    .d-portal:hover, .d-portal:focus-visible, .m-portal:hover, .m-portal:focus-visible { filter: drop-shadow(0 0 7px #fff) drop-shadow(0 0 15px #fff); }
     .content-panel { position: absolute; line-height: normal; z-index: 6; overflow-y: scroll; overflow-x: hidden; color: #24120a; background: #f1dfb4; scrollbar-color: #51285f #d4ba83; scrollbar-width: auto; scrollbar-gutter: stable; }
     .content-panel::-webkit-scrollbar { width: 12px; }
     .content-panel::-webkit-scrollbar-track { background: #d4ba83; border-left: 1px solid #694b34; }
@@ -161,10 +139,6 @@
     .portal-gate[hidden] { display: none; }
     .portal-gate picture { position: absolute; inset: 0; display: block; width: 100%; height: 100%; margin: 0; padding: 0; }
     .portal-gate img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; margin: 0; object-fit: fill; object-position: 50% 0; }
-    .portal-gate::after { content: ""; position: absolute; border: 1.5px solid #fff; border-radius: 999px;c opacity: 0; pointer-events: none; background: transparent; box-shadow: 0 0 3px #fff; transition: opacity .15s; }
-    .layout-desktop .portal-gate::after { left: 31%; bottom: 7.5%; width: 38%; height: 12%; }
-    .layout-mobile .portal-gate::after { left: 24%; bottom: 6%; width: 52%; height: 11%; }
-    .portal-gate:hover::after, .portal-gate:focus-visible::after, .portal-gate:active::after { opacity: 1; }
     .portal-gate:focus-visible { outline: 2px solid #fff; outline-offset: -3px; }
     .premium-chat-corner { position: fixed; right: 0; bottom: 0; margin: 0; padding: 0; z-index: 2147483000; line-height: normal; }
     .premium-chat-corner > * { margin: 0 !important; }
@@ -276,7 +250,7 @@
       .sparkle:nth-child(5n + 4) { top: 65%; }
       .sparkle:nth-child(5n) { top: 84%; }
       .bubble { bottom: 8%; opacity: .62; }
-      .hotspot, .hotspot::before, .hotspot::after, .portal-gate::after { transition: none; }
+      .hotspot { transition: none; }
     }
   </style>
 </head>
@@ -644,36 +618,12 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
     <!-- BOOK APPOINTMENT CONTENT -->
     <section class="content-section appointment-section" data-section="appointment" hidden>
       <h1 class="sr-only">Book Appointment</h1>
-      <img class="panel-header section-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949648/1B175689-30E3-498F-85E1-9F7E7DA450A0_wy1ktm.png" alt="Book Appointment">
-      <div class="appointment-form-wrap">
-        <iframe
-          id="JotFormIFrame-262546480507056-desktop"
-          class="jotform-appointment-frame"
-          title="Book Appointment"
-          allowtransparency="true"
-          allow="geolocation; microphone; camera; fullscreen; payment"
-          src="https://form.jotform.com/262546480507056"
-          frameborder="0"
-          scrolling="no"
-        ></iframe>
-      </div>
+      <a class="btn lightbox-262546480507056 lightbox-trigger" style="margin-top: 16px; text-transform: uppercase; font-size: 14px; text-decoration: none; cursor: pointer; display: inline-block; padding: 10px; font-family: inherit; text-shadow: none; user-select: none; transition: all .1s ease-in; background-color: #FFA500; border: 1px solid #FFA500; color: #FFFFFF;" data-lightbox="appointment">Book Appointment</a>
     </section>
     <!-- PLACE ORDER CONTENT -->
     <section class="content-section order-section" data-section="order" hidden>
-      <h1 class="sr-only">Place Order</h1>
-      <img class="panel-header section-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949647/C26936FD-B2C1-48D6-A696-E6DB9D4E0CC8_k7wzas.png" alt="Place Order">
-      <div class="order-form-wrap">
-        <iframe
-          id="JotFormIFrame-262545759554167-desktop"
-          class="jotform-order-frame"
-          title="Responsive Product Order Form"
-          allowtransparency="true"
-          allow="geolocation; microphone; camera; fullscreen; payment"
-          src="https://pci.jotform.com/form/262545759554167"
-          frameborder="0"
-          scrolling="no"
-        ></iframe>
-      </div>
+      <h1 class="sr-only">Place Order: Astrology Reports</h1>
+      <a class="btn lightbox-262545759554167 lightbox-trigger" style="margin-top: 16px; text-transform: uppercase; font-size: 14px; text-decoration: none; cursor: pointer; display: inline-block; padding: 10px; font-family: inherit; text-shadow: none; user-select: none; transition: all .1s ease-in; background-color: #FFA500; border: 1px solid #FFA500; color: #FFFFFF;" data-lightbox="order">Place Order: Astrology Reports</a>
     </section>
     <!-- CONTACT CONTENT -->
     <section class="content-section" data-section="contact" hidden><h1>Contact Me</h1><p><a href="mailto:Contact@AlchemicalVisions.com">Contact@AlchemicalVisions.com</a></p></section>
@@ -1064,36 +1014,12 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
     <!-- BOOK APPOINTMENT CONTENT -->
     <section class="content-section appointment-section" data-section="appointment" hidden>
       <h1 class="sr-only">Book Appointment</h1>
-      <img class="panel-header section-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949648/1B175689-30E3-498F-85E1-9F7E7DA450A0_wy1ktm.png" alt="Book Appointment">
-      <div class="appointment-form-wrap">
-        <iframe
-          id="JotFormIFrame-262546480507056-mobile"
-          class="jotform-appointment-frame"
-          title="Book Appointment"
-          allowtransparency="true"
-          allow="geolocation; microphone; camera; fullscreen; payment"
-          src="https://form.jotform.com/262546480507056"
-          frameborder="0"
-          scrolling="no"
-        ></iframe>
-      </div>
+      <a class="btn lightbox-262546480507056 lightbox-trigger" style="margin-top: 16px; text-transform: uppercase; font-size: 14px; text-decoration: none; cursor: pointer; display: inline-block; padding: 10px; font-family: inherit; text-shadow: none; user-select: none; transition: all .1s ease-in; background-color: #FFA500; border: 1px solid #FFA500; color: #FFFFFF;" data-lightbox="appointment">Book Appointment</a>
     </section>
     <!-- PLACE ORDER CONTENT -->
     <section class="content-section order-section" data-section="order" hidden>
-      <h1 class="sr-only">Place Order</h1>
-      <img class="panel-header section-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949647/C26936FD-B2C1-48D6-A696-E6DB9D4E0CC8_k7wzas.png" alt="Place Order">
-      <div class="order-form-wrap">
-        <iframe
-          id="JotFormIFrame-262545759554167-mobile"
-          class="jotform-order-frame"
-          title="Responsive Product Order Form"
-          allowtransparency="true"
-          allow="geolocation; microphone; camera; fullscreen; payment"
-          src="https://pci.jotform.com/form/262545759554167"
-          frameborder="0"
-          scrolling="no"
-        ></iframe>
-      </div>
+      <h1 class="sr-only">Place Order: Astrology Reports</h1>
+      <a class="btn lightbox-262545759554167 lightbox-trigger" style="margin-top: 16px; text-transform: uppercase; font-size: 14px; text-decoration: none; cursor: pointer; display: inline-block; padding: 10px; font-family: inherit; text-shadow: none; user-select: none; transition: all .1s ease-in; background-color: #FFA500; border: 1px solid #FFA500; color: #FFFFFF;" data-lightbox="order">Place Order: Astrology Reports</a>
     </section>
     <!-- CONTACT CONTENT -->
     <section class="content-section" data-section="contact" hidden><h1>Contact Me</h1><p><a href="mailto:Contact@AlchemicalVisions.com">Contact@AlchemicalVisions.com</a></p></section>
@@ -1124,14 +1050,22 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
     <area shape="rect" coords="143,252,236,406" data-route="home" href="#home" alt="Home"><area shape="rect" coords="235,252,322,406" data-route="news" href="#news" alt="News"><area shape="rect" coords="322,252,410,406" data-route="about" href="#about" alt="About"><area shape="rect" coords="409,252,499,406" data-route="services" href="#services" alt="Services"><area shape="rect" coords="498,252,590,406" data-route="astrology" href="#astrology" alt="Astrology Reports"><area shape="rect" coords="589,252,679,406" data-route="schedule" href="#schedule" alt="Schedule"><area shape="rect" coords="678,252,771,406" data-route="appointment" href="#appointment" alt="Book Appointment"><area shape="rect" coords="769,252,862,406" data-route="order" href="#order" alt="Place Order"><area shape="circle" coords="744,666,83" href="mailto:Contact@AlchemicalVisions.com" target="_blank" alt="Contact Me"><area shape="rect" coords="337,648,603,731" data-route="portal" href="#portal" alt="Live Reading Portal"><area shape="rect" coords="1206,946,1253,999" href="https://www.facebook.com/alchemicalvisions/" alt="Facebook"><area shape="rect" coords="1263,946,1310,999" href="https://www.instagram.com/alchemicalvisions/" alt="Instagram"><area shape="rect" coords="1321,946,1368,999" href="https://www.x.com/alchemicalvisions" alt="X / Twitter"><area shape="rect" coords="1378,946,1425,999" href="mailto:Contact@AlchemicalVisions.com" alt="Email">
   </map>
 
-  <!-- Jotform order form: one shared responsive embed handler for both layouts. -->
-  <script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
+  <script src="https://cdn.jotfor.ms/s/static/latest/static/feedback2.js" type="text/javascript"></script>
   <script>
-    if (typeof window.jotformEmbedHandler === 'function') {
-      window.jotformEmbedHandler("iframe.jotform-order-frame", "https://pci.jotform.com/");
-      window.jotformEmbedHandler("iframe.jotform-appointment-frame", "https://form.jotform.com/");
-    }
+    /* One shared Jotform library and one initialization per requested lightbox. */
+    var JFL_262545759554167 = new JotformFeedback({
+      formId: '262545759554167', base: 'https://form.jotform.com/',
+      windowTitle: 'Place Order: Astrology Reports', backgroundColor: '#FFA500',
+      fontColor: '#FFFFFF', type: '2', height: 736, width: 580, openOnLoad: false
+    });
+    var JFL_262546480507056 = new JotformFeedback({
+      formId: '262546480507056', base: 'https://form.jotform.com/',
+      windowTitle: 'Book Appointment', backgroundColor: '#FFA500',
+      fontColor: '#FFFFFF', type: '2', height: 736, width: 580, openOnLoad: false
+    });
   </script>
+  <script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
+  <script>window.jotformEmbedHandler("iframe[id='262545759554167']", "https://form.jotform.com/"); window.jotformEmbedHandler("iframe[id='262546480507056']", "https://form.jotform.com/");</script>
   <script>
     /* Premium.Chat creates its iframe asynchronously and may append it to the
        document body instead of beside its loader snippet. Move only this
@@ -1227,10 +1161,8 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
         name = validRoute(name);
         var sections = document.querySelectorAll('[data-section]');
         if (!sections.length) return;
-        if (name !== 'portal') {
-          var portalGates = document.querySelectorAll('.portal-gate');
-          for (var g = 0; g < portalGates.length; g++) portalGates[g].hidden = false;
-        }
+        var portalGates = document.querySelectorAll('.portal-gate');
+        for (var g = 0; g < portalGates.length; g++) portalGates[g].hidden = false;
         for (var i = 0; i < sections.length; i++) {
           var active = sections[i].getAttribute('data-section') === name;
           sections[i].hidden = !active;
