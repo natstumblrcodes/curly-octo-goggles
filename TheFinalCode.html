@@ -114,6 +114,18 @@
     .portal-gate:focus-visible { outline: 2px solid #fff; outline-offset: -3px; }
     .premium-chat-corner { position: fixed; right: 0; bottom: 0; margin: 0; padding: 0; z-index: 2147483000; line-height: normal; }
     .premium-chat-corner > * { margin: 0 !important; }
+    /* Override Premium.Chat's default lower-right placement for this second button. */
+    .premium-chat-left-corner,
+    .premium-chat-left-corner > * {
+      position: fixed !important;
+      right: auto !important;
+      bottom: 0 !important;
+      left: max(0px, env(safe-area-inset-left)) !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      z-index: 2147483000 !important;
+      line-height: normal !important;
+    }
     .ambient-sound-toggle {
       position: fixed; top: 14px; right: 14px; z-index: 2147483646;
       width: 36px; height: 36px; min-width: 36px; min-height: 36px;
@@ -518,6 +530,11 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
       else stop();
     }());
   </script>
+  <!-- BEGIN PREMIUM.CHAT BUTTON CODE -->
+  <div class="premium-chat-left-corner">
+    <script type="text/javascript" src="https://premium.chat/swbtn/5YyzDRBa4z.js"></script>
+  </div>
+  <!-- END PREMIUM.CHAT BUTTON CODE -->
   <!-- BEGIN PREMIUM.CHAT BUTTON CODE --><div class="premium-chat-corner">
     <script type="text/javascript" src="https://premium.chat/swbtn/vNy5kBqV4B.js"></script>
   </div><!-- END PREMIUM.CHAT BUTTON CODE --></body></html>
