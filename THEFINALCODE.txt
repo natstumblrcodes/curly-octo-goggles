@@ -92,6 +92,11 @@
     /* The cover is a panel-level overlay, so it also covers the portal heading. */
     .portal-cap { position: absolute; z-index: 30; inset: 0; display: block; width: 100%; height: 100%; object-fit: fill; }
     .portal-cap[hidden] { display: none; }
+    /* A real button reliably receives pointer, touch, and keyboard activation.
+       It aligns with the Enter Portal artwork without changing its appearance. */
+    .portal-cap-trigger { position: absolute; z-index: 31; left: 18%; top: 64%; width: 64%; height: 22%; margin: 0; padding: 0; border: 0; background: transparent; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .portal-cap-trigger:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+    .portal-cap[hidden] + .portal-cap-trigger { display: none; }
     /* Do not allow the embedded provider (or its iframe) to receive the cap's
        activation gesture. It becomes interactive only after the cap is gone. */
     .portal-view:has(.portal-cap:not([hidden])) .reading-portal-slot { pointer-events: none; }
@@ -618,7 +623,8 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
           </div>
         </div>
       </div>
-      <img id="desktop-portal-cap" class="portal-cap" data-portal-cap src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788991611/IMG_4391_vicok8.png" alt="Live reading portal cover" usemap="#desktop-portal-cap-map">
+      <img id="desktop-portal-cap" class="portal-cap" data-portal-cap src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788991611/IMG_4391_vicok8.png" alt="Live reading portal cover">
+      <button class="portal-cap-trigger" type="button" data-portal-cap-trigger="desktop-portal-cap" aria-label="Enter the live reading portal"></button>
     </section>
       </div></section>
       <nav aria-label="Primary navigation">
@@ -1005,7 +1011,8 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
       <h1 class="sr-only">Live Reading Portal</h1>
       <img class="panel-header portal-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949649/C2604EB8-27DF-4E1C-953B-87B9235FAC6F_nh2zt0.png" alt="Premium.chat">
       <div class="reading-portal-slot" data-reading-portal-slot></div>
-      <img id="mobile-portal-cap" class="portal-cap" data-portal-cap src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788991611/IMG_4392_zmwfyr.png" alt="Live reading portal cover" usemap="#mobile-portal-cap-map">
+      <img id="mobile-portal-cap" class="portal-cap" data-portal-cap src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788991611/IMG_4392_zmwfyr.png" alt="Live reading portal cover">
+      <button class="portal-cap-trigger" type="button" data-portal-cap-trigger="mobile-portal-cap" aria-label="Enter the live reading portal"></button>
     </section>
       </div></section>
       <nav aria-label="Primary navigation">
@@ -1019,15 +1026,6 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
   </main>
 
 
-
-  <!-- These polygons follow the printed Enter Portal button outlines in the
-       source artwork. Image maps scale the traced path with the cap image. -->
-  <map name="desktop-portal-cap-map"><area shape="poly" coords="124,516,432,516,447,524,456,540,456,669,447,685,432,693,124,693,109,685,100,669,100,540,109,524" data-portal-cap-trigger="desktop-portal-cap" href="#portal" alt="Enter the live reading portal"></map>
-  <map name="mobile-portal-cap-map"><area shape="poly" coords="128,465,451,465,466,473,475,489,475,601,466,617,451,625,128,625,113,617,104,601,104,489,113,473" data-portal-cap-trigger="mobile-portal-cap" href="#portal" alt="Enter the live reading portal"></map>
-  <!-- The coordinates below are the measured bounds of the printed Enter Portal
-       buttons in the two source images. Image maps scale with their images. -->
-  <map name="desktop-portal-cap-map"><area shape="rect" coords="100,516,456,693" data-portal-cap-trigger="desktop-portal-cap" href="#portal" alt="Enter the live reading portal"></map>
-  <map name="mobile-portal-cap-map"><area shape="rect" coords="104,465,475,625" data-portal-cap-trigger="mobile-portal-cap" href="#portal" alt="Enter the live reading portal"></map>
 
   <map name="mobile-map">
     <area shape="rect" coords="134,248,230,407" data-route="home" href="#home" alt="Home"><area shape="rect" coords="226,248,322,407" data-route="news" href="#news" alt="News"><area shape="rect" coords="324,248,420,407" data-route="about" href="#about" alt="About"><area shape="rect" coords="421,248,518,407" data-route="services" href="#services" alt="Services"><area shape="rect" coords="500,248,609,407" data-route="astrology" href="#astrology" alt="Astrology Reports"><area shape="rect" coords="598,248,704,407" data-route="schedule" href="#schedule" alt="Schedule"><area shape="rect" coords="695,248,804,407" data-route="appointment" href="#appointment" alt="Book Appointment"><area shape="rect" coords="792,248,901,407" data-route="order" href="#order" alt="Place Order"><area shape="rect" coords="855,850,1017,1034" href="mailto:Contact@AlchemicalVisions.com" target="_blank" alt="Contact Me"><area shape="rect" coords="18,928,211,1020" data-route="portal" href="#portal" alt="Live Reading Portal"><area shape="rect" coords="798,1458,833,1505" href="https://www.facebook.com/alchemicalvisions/" alt="Facebook"><area shape="rect" coords="837,1458,873,1505" href="https://www.instagram.com/alchemicalvisions/" alt="Instagram"><area shape="rect" coords="876,1458,910,1505" href="https://www.x.com/alchemicalvisions" alt="X / Twitter"><area shape="rect" coords="914,1458,950,1505" href="mailto:Contact@AlchemicalVisions.com" alt="Email">
