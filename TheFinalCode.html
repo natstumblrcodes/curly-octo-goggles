@@ -96,21 +96,7 @@
     .content-panel:has(.portal-view:not([hidden])) { overflow-y: clip; scrollbar-gutter: auto; }
     .portal-header { position: relative; height: 21%; max-height: none; margin-bottom: 1%; }
     /* One chat portal is moved between the desktop and mobile artwork panels. */
-    /* The reading selector travels with the shared portal so it is available in
-       both artwork layouts and remains directly above the provider widget. */
-    .portal-mode-buttons {
-      position: relative; z-index: 3; display: flex; flex: 0 0 12%; align-items: center;
-      justify-content: center; gap: 1%; margin: 0 2% 1%; line-height: 0;
-    }
-    .portal-mode-button {
-      flex: 1 1 0; min-width: 0; height: 100%; margin: 0; padding: 0; border: 0;
-      background: transparent; cursor: pointer; -webkit-tap-highlight-color: transparent;
-    }
-    .portal-mode-button img { display: block; width: 100%; height: 100%; object-fit: contain; }
-    .portal-mode-button:focus-visible { outline: 2px solid #51285f; outline-offset: 2px; }
-    .portal-mode-button[aria-pressed="true"] { filter: drop-shadow(0 0 4px #51285f); }
-    .live-reading-portal { display: flex; flex-direction: column; }
-    .pchat-scale-viewport { flex: 1 1 auto; height: auto; }
+    .live-reading-portal { display: block; }
 
 .reading-portal-slot {
   position: absolute;
@@ -624,11 +610,6 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
       <h1 class="sr-only">Live Reading Portal</h1>
       <img class="panel-header portal-header" src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1788949649/C2604EB8-27DF-4E1C-953B-87B9235FAC6F_nh2zt0.png" alt="Premium.chat">
       <div class="reading-portal-slot" data-reading-portal-slot><div class="live-reading-portal" data-reading-portal>
-        <div class="portal-mode-buttons" role="group" aria-label="Choose reading type">
-          <button class="portal-mode-button" type="button" data-pchat-widget-id="1014748" aria-pressed="true"><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789727700/1982B274-FC39-49E9-8270-CED8E5A01F9C_sauvu8.png" alt="Keyboard chat"></button>
-          <button class="portal-mode-button" type="button" data-pchat-widget-id="1016623" aria-pressed="false"><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789727700/51BBA94C-0337-4B97-B47C-139AC69EA5E0_l9fd0y.png" alt="Audio call"></button>
-          <button class="portal-mode-button" type="button" data-pchat-widget-id="1016625" aria-pressed="false"><img src="https://res.cloudinary.com/dgpfj9fox/image/upload/v1789727700/CE3E5173-CED6-428E-8E01-A59609D988DD_rjthwr.png" alt="Video chat"></button>
-        </div>
         <div class="pchat-scale-viewport" data-pchat-scale-viewport>
           <div class="pchat-scale-canvas" data-pchat-scale-canvas>
             <!-- The provider is given this larger canvas, then the canvas is scaled as one interactive unit. -->
@@ -1066,15 +1047,14 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
   <script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
   <script>window.jotformEmbedHandler("iframe[id='262545759554167']", "https://form.jotform.com/"); window.jotformEmbedHandler("iframe[id='262546480507056']", "https://form.jotform.com/");</script>
   <script>
-    /* Keep the three provider widgets loaded once, then expose only the
-       selected reading type. This avoids relying on an undocumented reload API. */
+    /* Keep the provider widgets loaded once while displaying the default chat
+       widget. This avoids relying on an undocumented reload API. */
     (function () {
       'use strict';
       var widgetIds = ['1014748', '1016623', '1016625'];
       var activeWidgetId = '1014748';
       var viewport = document.querySelector('[data-pchat-scale-viewport]');
       var host = document.querySelector('[data-pchat-embed-host]');
-      var modeButtons = document.querySelectorAll('[data-pchat-widget-id]');
       var providerRoots = {};
       var mobileQuery = window.matchMedia('(max-width: 767px), (orientation: portrait)');
       if (!viewport || !host) return;
@@ -1105,9 +1085,6 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
             positionProvider(providerRoots[id]);
           }
         }
-        for (var i = 0; i < modeButtons.length; i++) {
-          modeButtons[i].setAttribute('aria-pressed', String(modeButtons[i].getAttribute('data-pchat-widget-id') === activeWidgetId));
-        }
       }
 
       function inspectProviders() {
@@ -1132,12 +1109,6 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
         updateVisibleWidget();
       }
 
-      for (var b = 0; b < modeButtons.length; b++) {
-        modeButtons[b].addEventListener('click', function () {
-          activeWidgetId = this.getAttribute('data-pchat-widget-id');
-          updateVisibleWidget();
-        });
-      }
       new MutationObserver(inspectProviders).observe(document.body, { childList: true, subtree: true });
       if (mobileQuery.addEventListener) mobileQuery.addEventListener('change', updateVisibleWidget);
       else mobileQuery.addListener(updateVisibleWidget);
