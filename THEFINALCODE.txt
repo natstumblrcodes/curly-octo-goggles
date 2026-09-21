@@ -92,6 +92,9 @@
     /* The cover is a panel-level overlay, so it also covers the portal heading. */
     .portal-cap { position: absolute; z-index: 30; inset: 0; display: block; width: 100%; height: 100%; object-fit: fill; }
     .portal-cap[hidden] { display: none; }
+    /* Do not allow the embedded provider (or its iframe) to receive the cap's
+       activation gesture. It becomes interactive only after the cap is gone. */
+    .portal-view:has(.portal-cap:not([hidden])) .reading-portal-slot { pointer-events: none; }
     .live-reading-portal { position: absolute; inset: 0; display: flex; flex-direction: column; width: 100%; height: 100%; overflow: hidden; background: #f1dfb4; }
     .pchat-service-controls { position: relative; z-index: 3; display: flex; flex: 0 0 auto; align-items: center; justify-content: center; gap: clamp(4px, 1vw, 12px); padding: 2px 3px 5px; line-height: normal; }
     .pchat-service-button { width: min(31%, 145px); min-width: 0; padding: 0; border: 0; background: transparent; cursor: pointer; -webkit-tap-highlight-color: transparent; }
@@ -1017,6 +1020,10 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
 
 
 
+  <!-- These polygons follow the printed Enter Portal button outlines in the
+       source artwork. Image maps scale the traced path with the cap image. -->
+  <map name="desktop-portal-cap-map"><area shape="poly" coords="124,516,432,516,447,524,456,540,456,669,447,685,432,693,124,693,109,685,100,669,100,540,109,524" data-portal-cap-trigger="desktop-portal-cap" href="#portal" alt="Enter the live reading portal"></map>
+  <map name="mobile-portal-cap-map"><area shape="poly" coords="128,465,451,465,466,473,475,489,475,601,466,617,451,625,128,625,113,617,104,601,104,489,113,473" data-portal-cap-trigger="mobile-portal-cap" href="#portal" alt="Enter the live reading portal"></map>
   <!-- The coordinates below are the measured bounds of the printed Enter Portal
        buttons in the two source images. Image maps scale with their images. -->
   <map name="desktop-portal-cap-map"><area shape="rect" coords="100,516,456,693" data-portal-cap-trigger="desktop-portal-cap" href="#portal" alt="Enter the live reading portal"></map>
@@ -1283,6 +1290,7 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
       for (var pt = 0; pt < portalCapTriggers.length; pt++) {
         portalCapTriggers[pt].addEventListener('click', function (event) {
           event.preventDefault();
+          event.stopImmediatePropagation();
           var cap = document.getElementById(this.getAttribute('data-portal-cap-trigger'));
           if (cap) cap.hidden = true;
         });
