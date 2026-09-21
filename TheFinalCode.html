@@ -101,6 +101,7 @@
 .reading-portal-slot {
   position: absolute;
   z-index: 2;
+  /* Begin exactly where the 21%-high portal heading ends. */
   top: 21%;
   left: 0;
   right: 0;
@@ -615,8 +616,6 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
             <!-- The provider is given this larger canvas, then the canvas is scaled as one interactive unit. -->
             <div class="pchat-embed-host" data-pchat-embed-host>
               <div class="pchat-widget-placeholder"></div><script type="text/javascript">(function(d,w,i){w.premiumchat=w.premiumchat||[];var p=w.premiumchat;if(!p.length){(()=>{w.premiumchat_domain='https://premium.chat/';var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src=w.premiumchat_domain+'embed/js/widget.js';var ss=d.getElementsByTagName('script')[0];ss.parentNode.insertBefore(s,ss);})();}p.push({'num':p.length,'wid':i});})(document,window,1014748);</script>
-              <div class="pchat-widget-placeholder"></div><script type="text/javascript">(function(d,w,i){w.premiumchat=w.premiumchat||[];w.premiumchat.push({'num':w.premiumchat.length,'wid':i});})(document,window,1016623);</script>
-              <div class="pchat-widget-placeholder"></div><script type="text/javascript">(function(d,w,i){w.premiumchat=w.premiumchat||[];w.premiumchat.push({'num':w.premiumchat.length,'wid':i});})(document,window,1016625);</script>
             </div>
           </div>
         </div>
@@ -1047,12 +1046,11 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
   <script src="https://cdn.jotfor.ms/s/umd/latest/for-form-embed-handler.js"></script>
   <script>window.jotformEmbedHandler("iframe[id='262545759554167']", "https://form.jotform.com/"); window.jotformEmbedHandler("iframe[id='262546480507056']", "https://form.jotform.com/");</script>
   <script>
-    /* Keep the provider widgets loaded once while displaying the default chat
-       widget. This avoids relying on an undocumented reload API. */
+    /* Keep the text-chat widget in the portal after its asynchronous loader
+       creates it. Only widget 1014748 is loaded for this view. */
     (function () {
       'use strict';
-      var widgetIds = ['1014748', '1016623', '1016625'];
-      var activeWidgetId = '1014748';
+      var widgetId = '1014748';
       var viewport = document.querySelector('[data-pchat-scale-viewport]');
       var host = document.querySelector('[data-pchat-embed-host]');
       var providerRoots = {};
@@ -1062,10 +1060,7 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
       function widgetIdFor(node) {
         if (!node || node.nodeType !== 1 || node.closest('.premium-chat-corner')) return null;
         var value = (node.id || '') + ' ' + (node.className || '') + ' ' + (node.getAttribute('src') || '');
-        for (var i = 0; i < widgetIds.length; i++) {
-          if (value.indexOf(widgetIds[i]) !== -1) return widgetIds[i];
-        }
-        return null;
+        return value.indexOf(widgetId) !== -1 ? widgetId : null;
       }
 
       function outerProviderNode(node) {
@@ -1079,12 +1074,7 @@ Please use the <a data-route="appointment" href="#appointment">Book Appointment<
       }
 
       function updateVisibleWidget() {
-        for (var id in providerRoots) {
-          if (Object.prototype.hasOwnProperty.call(providerRoots, id)) {
-            providerRoots[id].hidden = id !== activeWidgetId;
-            positionProvider(providerRoots[id]);
-          }
-        }
+        if (providerRoots[widgetId]) positionProvider(providerRoots[widgetId]);
       }
 
       function inspectProviders() {
